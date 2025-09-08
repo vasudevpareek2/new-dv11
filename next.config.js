@@ -117,11 +117,14 @@ const nextConfig = {
     ];
   },
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    console.log('API rewrites configured for backend URL:', backendUrl);
+    
     return [
       // Proxy API requests to the backend server
       {
         source: '/api/:path*',
-        destination: 'http://localhost:5000/api/:path*',
+        destination: `${backendUrl}/api/:path*`,
       },
       // Keep any other rewrites you might have
       {
