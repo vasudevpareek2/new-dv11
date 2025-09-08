@@ -68,10 +68,10 @@ export default function Footer() {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-gray-600 hover:bg-primary-100 hover:text-primary-600 transition-colors duration-300 shadow-sm"
+                  className="text-gray-600 hover:text-primary-600 transition-colors duration-300"
                   aria-label={social.name}
                 >
-                  <i className={`fab fa-${social.icon} text-sm`}></i>
+                  <i className={`fab fa-${social.icon} text-xl`}></i>
                 </a>
               ))}
             </div>
