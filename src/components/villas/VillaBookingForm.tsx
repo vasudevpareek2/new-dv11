@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getApiUrl } from '@/lib/api-utils';
 import { toast } from 'react-hot-toast';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 import { api } from '@/lib/api';
