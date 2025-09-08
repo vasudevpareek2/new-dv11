@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { getApiUrl } from '@/lib/api-utils';
 import { toast } from 'react-hot-toast';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 
@@ -140,17 +141,20 @@ export default function VillaBookingForm({
       console.log('Payment successful:', response);
 
       try {
-        const verifyResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/verify`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              bookingId: response.bookingId,
-            }),
+        const verifyUrl = getApiUrl('/payments/verify');
+        const verifyResponse = await fetch(verifyUrl, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+            bookingId: response.bookingId,
+          }),
           }
         );
 
@@ -207,13 +211,12 @@ export default function VillaBookingForm({
         },
       };
 
-      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/orders`.replace(/([^:]\/)\/+/g, '$1');
+      const apiUrl = getApiUrl('/payments/orders');
       
       console.log('Sending request to:', apiUrl);
       console.log('Request payload:', requestPayload);
       
-      
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/orders`, {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestPayload)
