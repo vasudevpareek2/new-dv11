@@ -27,9 +27,11 @@ export async function apiRequest<T = any>(
     method,
     headers: {
       ...(!isFormData && { 'Content-Type': 'application/json' }),
+      'Accept': 'application/json',
       ...headers,
     },
     credentials: 'include', // Include cookies for authentication
+    mode: 'cors', // Explicitly set CORS mode
   };
 
   // Add body if present and not a GET/HEAD request
@@ -38,18 +40,25 @@ export async function apiRequest<T = any>(
   }
 
   // Get the base API URL from environment variables or use a default
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  // Use the Next.js proxy instead of direct external calls
+  const baseUrl = '/apii';
   const apiUrl = `${baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
 
   try {
-    // Use the full URL for the fetch request
-    const response = await fetch(apiUrl, {
-      ...config,
-      headers: {
-        ...config.headers,
-        'Content-Type': 'application/json',
-      },
+    console.log('Making API request to:', apiUrl);
+    console.log('Request config:', {
+      method: config.method,
+      headers: config.headers,
+      body: config.body,
+      mode: config.mode,
+      credentials: config.credentials
     });
+    
+    // Use the full URL for the fetch request
+    const response = await fetch(apiUrl, config);
+    
+    console.log('Response status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
     const responseData = await response.json().catch(() => ({}));
 

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 import toast from 'react-hot-toast';
+import { api } from '@/lib/api';
 
 interface PaymentButtonProps {
   amount: number;
@@ -51,6 +52,39 @@ export default function PaymentButton({
 }: PaymentButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
+  // Test function to debug API calls
+  const testApiCall = async () => {
+    try {
+      console.log('Testing API call...');
+      const response = await fetch('/apii/payments/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: 10000,
+          currency: 'INR',
+          notes: {}
+        })
+      });
+      
+      console.log('Test response status:', response.status);
+      console.log('Test response headers:', Object.fromEntries(response.headers.entries()));
+      
+      const data = await response.text();
+      console.log('Test response body:', data);
+      
+      if (!response.ok) {
+        console.error('Test API call failed:', response.status, data);
+      } else {
+        console.log('Test API call successful:', data);
+      }
+    } catch (error) {
+      console.error('Test API call error:', error);
+    }
+  };
+
   const handlePayment = async () => {
     if (!amount || amount <= 0) {
       const error = new Error('Please enter a valid amount');
@@ -63,25 +97,23 @@ export default function PaymentButton({
 
     try {
       // 1. Create order on our server
-      const orderRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: Math.round(amount * 100), // Convert to paise
-          currency,
-          notes: metadata,
-        }),
+      console.log('Creating order with data:', {
+        amount: Math.round(amount * 100),
+        currency,
+        notes: metadata,
+      });
+      
+      const { data: orderData, error: orderError } = await api.post<OrderResponse>('/payments/orders', {
+        amount: Math.round(amount * 100), // Convert to paise
+        currency,
+        notes: metadata,
       });
 
-      let orderData: OrderResponse;
-      try {
-        orderData = await orderRes.json();
-      } catch (e) {
-        throw new Error('Invalid response from server');
-      }
+      console.log('Order response:', { orderData, orderError });
 
-      if (!orderRes.ok) {
-        throw new Error(orderData.error || 'Failed to create order');
+      if (orderError || !orderData) {
+        console.error('Order creation failed:', orderError);
+        throw new Error(orderError?.message || 'Failed to create order');
       }
 
       const { orderId, amount: orderAmount, currency: orderCurrency } = orderData;
@@ -117,24 +149,23 @@ export default function PaymentButton({
         handler: async function (response: RazorpayPaymentSuccess) {
           try {
             // Verify payment on our server
-            const verifyRes = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/verify`,
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_signature: response.razorpay_signature,
-                }),
-              }
-            );
+            console.log('Verifying payment with data:', {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+            
+            const { data: verifyData, error: verifyError } = await api.post<VerifyResponse>('/payments/verify', {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+            });
 
-            let verifyData: VerifyResponse;
-            try {
-              verifyData = await verifyRes.json();
-            } catch (e) {
-              throw new Error('Invalid verification response');
+            console.log('Verification response:', { verifyData, verifyError });
+
+            if (verifyError || !verifyData) {
+              console.error('Payment verification failed:', verifyError);
+              throw new Error(verifyError?.message || 'Payment verification failed');
             }
 
             if (verifyData.success) {
@@ -208,13 +239,23 @@ export default function PaymentButton({
   };
 
   return (
-    <button
-      onClick={handlePayment}
-      disabled={disabled || isLoading}
-      className={`px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${className}`}
-      aria-busy={isLoading}
-    >
-      {isLoading ? 'Processing...' : buttonText}
-    </button>
+    <div className="flex gap-2">
+      <button
+        onClick={handlePayment}
+        disabled={disabled || isLoading}
+        className={`px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${className}`}
+        aria-busy={isLoading}
+      >
+        {isLoading ? 'Processing...' : buttonText}
+      </button>
+      
+      {/* Debug button - remove this after testing */}
+      <button
+        onClick={testApiCall}
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+      >
+        Test API
+      </button>
+    </div>
   );
 }

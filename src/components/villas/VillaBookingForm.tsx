@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
+import { api } from '@/lib/api';
 
 type PriceTier = {
   guests: number;
@@ -140,24 +141,15 @@ export default function VillaBookingForm({
       console.log('Payment successful:', response);
 
       try {
-        const verifyResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/verify`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              bookingId: response.bookingId,
-            }),
-          }
-        );
+        const { data, error: verifyError } = await api.post<VerifyResponse>('/payments/verify', {
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_signature: response.razorpay_signature,
+          bookingId: response.bookingId,
+        });
 
-        const data = await verifyResponse.json();
-
-        if (!verifyResponse.ok) {
-          throw new Error(data.error || 'Payment verification failed');
+        if (verifyError || !data) {
+          throw new Error(verifyError?.message || 'Payment verification failed');
         }
 
         toast.success('Booking confirmed! We will contact you shortly.');
@@ -207,16 +199,11 @@ export default function VillaBookingForm({
         },
       };
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestPayload),
-      });
+      
+      const { data, error: orderError } = await api.post<BookingResponse>('/payments/orders', requestPayload);
 
-      const data: BookingResponse = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create booking');
+      if (orderError || !data) {
+        throw new Error(orderError?.message || 'Failed to create booking');
       }
 
       if (!data.orderId || !data.bookingId) {
