@@ -1,0 +1,113 @@
+"use client";
+
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+type Room = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  size: string;
+  capacity: string;
+  image: string;
+  features: string[];
+};
+
+const rooms: Room[] = [
+  {
+    id: 'rosa',
+    name: 'Villa Rosa',
+    description: 'A romantic 2-bedroom villa with private pool and modern amenities, perfect for couples or small families.',
+    price: 20000,
+    size: '251 m²',
+    capacity: 'Up to 4 Guests',
+    image: '/images/villas/rosa/main.jpg',
+    features: ['Private Pool', '2 Bedrooms', 'Air Conditioning', 'Free WiFi', 'Flat-screen TV']
+  },
+  {
+    id: 'casa-mia',
+    name: 'Villa CASA MIA',
+    description: 'Spacious 3-bedroom villa with private pool, perfect for families or groups seeking comfort and luxury.',
+    price: 30000,
+    size: '251 m²',
+    capacity: 'Up to 6 Guests',
+    image: '/images/villas/casa-mia/main.jpg',
+    features: ['Private Pool', '3 Bedrooms', 'Air Conditioning', 'Free WiFi', 'Coffee Machine']
+  },
+  {
+    id: 'la-villa-grande',
+    name: 'La Villa Grande',
+    description: 'Our most luxurious 4-bedroom villa with private pool, perfect for large families or groups.',
+    price: 45000,
+    size: '279 m²',
+    capacity: 'Up to 8 Guests',
+    image: '/images/villas/la-villa-grande/main.jpg',
+    features: ['Private Pool', '4 Bedrooms', 'Air Conditioning', 'Free WiFi', 'Minibar']
+  }
+];
+
+export default function Rooms() {
+  const [imageError, setImageError] = useState<Record<string, boolean>>({});
+
+  const handleImageError = (id: string) => {
+    setImageError(prev => ({ ...prev, [id]: true }));
+  };
+
+  return (
+    <section id="rooms" className="py-20 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4 font-serif">Our Villas</h2>
+          <div className="w-20 h-1 bg-amber-500 mx-auto"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {rooms.map((room) => (
+            <div key={room.id} className="group relative w-full rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500" style={{ aspectRatio: '3/4' }}>
+              <div className="relative w-full h-full min-h-[500px]">
+                {!imageError[room.id] ? (
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={room.image}
+                      alt={room.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      priority
+                      unoptimized={process.env.NODE_ENV !== 'production'}
+                      sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33.33vw"
+                      onError={() => handleImageError(room.id)}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-500">Image not available</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col items-center justify-end h-full">
+                <h3 className="text-3xl font-bold text-white mb-6 font-serif text-center">{room.name}</h3>
+                <Link 
+                  href={`/villas/${room.id}`}
+                  className="bg-white hover:bg-gray-100 text-primary-600 font-medium py-3 px-8 rounded-full transition-all duration-300 flex items-center gap-2 group"
+                >
+                  Discover
+                  <svg 
+                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

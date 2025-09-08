@@ -1,0 +1,60 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    
+    /* Path Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    
+    /* Strict Type-Checking Options */
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    /* Module Resolution Options */
+    "allowSyntheticDefaultImports": true,
+    "preserveSymlinks": false,
+    "allowUmdGlobalAccess": true,
+    
+    /* Source Map Options */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    
+    /* Experimental Options */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next.config.mjs"
+  ],
+  "exclude": ["node_modules", ".next", "out"]
+}
