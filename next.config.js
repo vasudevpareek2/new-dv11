@@ -36,23 +36,23 @@ const nextConfig = {
     },
   },
   // Configure serverless function configuration
+  // Server-side configuration
   serverRuntimeConfig: {
     // Will only be available on the server side
-    apiUrl: process.env.API_URL || 'http://localhost:5000',
+    apiUrl: process.env.NEXT_PUBLIC_API_BACKEND_URL || 'https://api.dolcevitapushkar.com',
   },
+  // Client-side configuration
   publicRuntimeConfig: {
     // Will be available on both server and client
-    apiUrl: process.env.NODE_ENV === 'production' 
-      ? (process.env.NEXT_PUBLIC_API_URL || 'https://dolcevitapushkar.com/api')
-      : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'),
+    apiUrl: process.env.NEXT_PUBLIC_API_BACKEND_URL || 'https://api.dolcevitapushkar.com',
   },
-  // Ensure API routes are properly handled in production
+  // Rewrite API requests in development to avoid CORS issues
   async rewrites() {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       return [
         {
           source: '/api/:path*',
-          destination: `${process.env.NEXT_PUBLIC_API_BACKEND_URL || 'https://api.dolcevitapushkar.com'}/api/:path*`,
+          destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/:path*`,
         },
       ];
     }
@@ -63,9 +63,15 @@ const nextConfig = {
 
     // Add environment variables to the client-side bundle
     config.plugins.push(
-      new webpack.EnvironmentPlugin({
-        NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
-      })
+      new webpack.EnvironmentPlugin([
+        'NODE_ENV',
+        'NEXT_PUBLIC_SITE_URL',
+        'NEXT_PUBLIC_API_URL',
+        'NEXT_PUBLIC_API_BACKEND_URL',
+        'NEXT_PUBLIC_RAZORPAY_KEY_ID',
+        'NEXT_PUBLIC_GA_TRACKING_ID',
+        'NEXT_PUBLIC_RECAPTCHA_SITE_KEY'
+      ])
     );
 
     // Fixes npm packages that depend on `fs` module
