@@ -192,7 +192,7 @@ export default function VillaBookingForm({
       setIsLoading(true);
 
       const requestPayload: BookingPayload = {
-        amount: Math.round(total * 100), // Convert to paise
+        amount: total , // Convert to paise
         currency: 'INR',
         receipt: `booking_${Date.now()}`,
         notes: {
