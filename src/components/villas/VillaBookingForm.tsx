@@ -207,17 +207,28 @@ export default function VillaBookingForm({
         },
       };
 
+      const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/orders`.replace(/([^:]\/)\/+/g, '$1');
+      
+      console.log('Sending request to:', apiUrl);
+      console.log('Request payload:', requestPayload);
+      
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/payments/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestPayload),
+        body: JSON.stringify(requestPayload)
       });
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (e) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        throw new Error(errorData.error || `Failed to create booking. Status: ${response.status}`);
+      }
 
       const data: BookingResponse = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create booking');
-      }
 
       if (!data.orderId || !data.bookingId) {
         throw new Error('Invalid response from server: missing orderId or bookingId');
