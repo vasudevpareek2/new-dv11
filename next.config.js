@@ -26,6 +26,23 @@ const nextConfig = {
     // concurrentFeatures: true,
     // Enable webpack build worker
     webpackBuildWorker: true,
+    // Enable standalone output for better serverless deployment
+    output: 'standalone',
+  },
+  // Configure API routes to be handled by the Node.js server
+  api: {
+    bodyParser: {
+      sizeLimit: '1mb',
+    },
+  },
+  // Configure serverless function configuration
+  serverRuntimeConfig: {
+    // Will only be available on the server side
+    apiUrl: process.env.API_URL || 'http://localhost:5000',
+  },
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   },
   webpack: (config, { isServer, dev }) => {
     // Add custom webpack configurations here

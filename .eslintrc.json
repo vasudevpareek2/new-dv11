@@ -63,12 +63,7 @@
             "group": "internal"
           }
         ],
-        "pathGroupsExcludeImportTypes": ["react"],
-        "newlines-between": "always",
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        }
+        "pathGroupsExcludeImportTypes": ["react"]
       }
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
