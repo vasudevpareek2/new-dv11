@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { getApiUrl } from '@/lib/api-utils';
 import { toast } from 'react-hot-toast';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 import { api } from '@/lib/api';
@@ -141,7 +142,7 @@ export default function VillaBookingForm({
       console.log('Payment successful:', response);
 
       try {
-        const { data, error: verifyError } = await api.post<VerifyResponse>('/payments/verify', {
+        const { data, error: verifyError } = await api.post<any>('/payments/verify', {
           razorpay_payment_id: response.razorpay_payment_id,
           razorpay_order_id: response.razorpay_order_id,
           razorpay_signature: response.razorpay_signature,
