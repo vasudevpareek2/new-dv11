@@ -68,9 +68,7 @@ const nextConfig = {
         'NEXT_PUBLIC_SITE_URL',
         'NEXT_PUBLIC_API_URL',
         'NEXT_PUBLIC_API_BACKEND_URL',
-        'NEXT_PUBLIC_RAZORPAY_KEY_ID',
-        'NEXT_PUBLIC_GA_TRACKING_ID',
-        'NEXT_PUBLIC_RECAPTCHA_SITE_KEY'
+        'NEXT_PUBLIC_RAZORPAY_KEY_ID'
       ])
     );
 
@@ -194,8 +192,6 @@ const nextConfig = {
   // Environment variables that will be available on the client side
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-    NEXT_PUBLIC_GA_TRACKING_ID: process.env.NEXT_PUBLIC_GA_TRACKING_ID || '',
-    NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
   },
   // Enable static exports for static site generation
   // output: 'export',
