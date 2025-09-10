@@ -41,12 +41,12 @@ export default function Hero() {
       {/* Hero Content */}
       <div className="relative z-10 w-full px-4 mx-auto max-w-5xl h-full">
         <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 w-full px-4 text-center">
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-normal font-philosopher uppercase text-white">
+          <h1 className="text-xl md:text-3xl lg:text-4xl font-normal font-philosopher uppercase text-white/90">
             Luxurious Villas in Pushkar
           </h1>
           <div className="flex items-center justify-center mt-3">
-            <div className="h-px w-32 bg-yellow-400 mr-3"></div>
-            <p className="text-lg md:text-xl lg:text-2xl font-normal font-philosopher uppercase text-white">
+            <div className="h-px w-24 bg-yellow-400/80 mr-3"></div>
+            <p className="text-base md:text-lg lg:text-xl font-normal font-philosopher uppercase text-white/80">
               Experience the Sweet Life
             </p>
             <div className="h-px w-32 bg-yellow-400 ml-3"></div>

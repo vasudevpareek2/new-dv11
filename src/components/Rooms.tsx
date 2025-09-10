@@ -86,9 +86,23 @@ export default function Rooms() {
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                
+                {/* Text Overlay */}
+                <div className="absolute left-1/2 bottom-32 transform -translate-x-1/2 w-full px-6 text-center">
+                  <p className="text-white text-lg md:text-xl font-light italic mb-4">
+                    {room.id === 'rosa' 
+                      ? 'A romantic hideaway for couples, where elegance meets intimacy.'
+                      : room.id === 'casa-mia' 
+                        ? 'Serene villa - A tranquil escape for family and friends.'
+                        : 'The perfect destination for memorable reunions and milestones.'}
+                  </p>
+                  <h3 className="text-3xl md:text-4xl font-bold text-white font-serif tracking-wide">
+                    {room.name}
+                    <div className="w-20 h-0.5 bg-amber-400 mx-auto mt-3 mb-4"></div>
+                  </h3>
+                </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col items-center justify-end h-full">
-                <h3 className="text-3xl font-bold text-white mb-6 font-serif text-center">{room.name}</h3>
+              <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col items-center justify-end h-1/2">
                 <Link 
                   href={`/villas/${room.id}`}
                   className="bg-white hover:bg-gray-100 text-primary-600 font-medium py-3 px-8 rounded-full transition-all duration-300 flex items-center gap-2 group"
@@ -98,9 +112,10 @@ export default function Rooms() {
                     className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
                     fill="none" 
                     stroke="currentColor" 
-                    viewBox="0 0 24 24"
+                    viewBox="0 0 24 24" 
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </Link>
               </div>
