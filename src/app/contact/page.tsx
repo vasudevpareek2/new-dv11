@@ -88,8 +88,9 @@ export default function ContactPage() {
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Location</h3>
                     <p className="mt-1 text-gray-600">
-                      Near Pushkar Lake, Pushkar,<br />
-                      Rajasthan 305022, India
+                      123 Luxury Villa Lane,<br />
+                      Pushkar, Rajasthan 305022,<br />
+                      India
                     </p>
                   </div>
                 </div>
@@ -103,7 +104,7 @@ export default function ContactPage() {
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Phone</h3>
                     <p className="mt-1 text-gray-600">+91 98765 43210</p>
-                    <p className="mt-1 text-gray-600">+91 11 2345 6789</p>
+                    <p className="mt-1 text-gray-600">+91 96600 88590</p>
                   </div>
                 </div>
                 

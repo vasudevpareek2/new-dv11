@@ -14,10 +14,6 @@ export default function Home() {
       <div className="relative">
         <Hero />
         <div className="container mx-auto px-4 mt-12 md:mt-16">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl font-philosopher font-medium text-gray-800 mb-2">Best Rate Guarantee</h2>
-            <p className="text-gray-600">Book directly with us for the best rates and exclusive benefits</p>
-          </div>
           <BookingForm />
         </div>
       </div>
