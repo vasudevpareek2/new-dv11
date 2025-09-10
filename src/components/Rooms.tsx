@@ -65,8 +65,8 @@ export default function Rooms() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {rooms.map((room) => (
-            <div key={room.id} className="group relative w-full rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500" style={{ aspectRatio: '3/4' }}>
-              <div className="relative w-full h-full min-h-[500px]">
+            <div key={room.id} className="group w-full rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 flex flex-col">
+              <div className="relative w-full" style={{ aspectRatio: '3/4' }}>
                 {!imageError[room.id] ? (
                   <div className="relative w-full h-full">
                     <Image
@@ -88,7 +88,7 @@ export default function Rooms() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                 
                 {/* Text Overlay */}
-                <div className="absolute left-1/2 bottom-32 transform -translate-x-1/2 w-full px-6 text-center">
+                <div className="absolute left-1/2 bottom-20 transform -translate-x-1/2 w-full px-6 text-center">
                   <p className="text-white text-lg md:text-xl font-light italic mb-4">
                     {room.id === 'rosa' 
                       ? 'A romantic hideaway for couples, where elegance meets intimacy.'
@@ -102,10 +102,10 @@ export default function Rooms() {
                   </h3>
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col items-center justify-end h-1/2">
+              <div className="p-6 bg-white flex justify-center">
                 <Link 
                   href={`/villas/${room.id}`}
-                  className="bg-white hover:bg-gray-100 text-primary-600 font-medium py-3 px-8 rounded-full transition-all duration-300 flex items-center gap-2 group"
+                  className="bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-8 rounded-full transition-all duration-300 flex items-center gap-2 group"
                 >
                   Discover
                   <svg 
