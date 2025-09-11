@@ -154,7 +154,7 @@ export default function VillaRosa() {
             <VillaBookingForm
               villaId='rosa'
               villaName='Villa Rosa'
-              basePrice={20000}
+              basePrices={basePrices}
               maxGuests={4}
             />
 

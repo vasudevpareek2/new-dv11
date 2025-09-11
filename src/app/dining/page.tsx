@@ -3,6 +3,9 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+/*
+// Commented out for future use
+
 type DiningOption = {
   id: string;
   title: string;
@@ -62,138 +65,36 @@ const diningOptions: DiningOption[] = [
     timing: '7:00 AM - 10:00 PM',
   },
 ];
+*/
 
 export default function DiningPage() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className='min-h-screen bg-gray-50'>
-        {/* Hero Section */}
-        <div className='relative h-[70vh] bg-gray-300 flex items-center justify-center'>
-          <div className='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center'>
-            <div className='text-center text-white px-4'>
-              <h1 className='text-4xl md:text-6xl font-bold mb-6'>Dining at Dolce Vita</h1>
-              <p className='text-xl md:text-2xl max-w-3xl mx-auto'>
-                Experience a culinary journey through the flavors of Rajasthan and beyond
-              </p>
-            </div>
+      <main className="flex-grow flex items-center justify-center bg-gray-50">
+        <div className="text-center px-4 py-20 max-w-4xl mx-auto">
+          <div className="mb-8">
+            <div className="w-24 h-1 bg-amber-500 mx-auto mb-6"></div>
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-serif">
+              Coming Soon
+            </h1>
+            <div className="w-24 h-1 bg-amber-500 mx-auto my-6"></div>
+            <p className="text-xl md:text-2xl text-gray-600 mb-8">
+              We're crafting an exceptional dining experience for you.
+            </p>
+            <p className="text-gray-500 max-w-2xl mx-auto mb-8">
+              Our culinary team is working hard to bring you a unique dining experience that combines local flavors with international cuisine. Please check back soon for updates.
+            </p>
+            <a 
+              href="/contact" 
+              className="inline-block bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-8 rounded-full transition-colors duration-300"
+            >
+              Contact Us
+            </a>
           </div>
         </div>
-
-        {/* Dining Options */}
-        <section className='py-16 bg-white'>
-          <div className='container mx-auto px-4'>
-            <div className='text-center mb-12'>
-              <h2 className='text-3xl md:text-4xl font-bold text-gray-900 mb-4'>
-                Our Dining Experiences
-              </h2>
-              <div className='w-24 h-1 bg-amber-600 mx-auto mb-6'></div>
-              <p className='text-gray-600 max-w-3xl mx-auto'>
-                From traditional Rajasthani thalis to international cuisine, our restaurants offer a
-                diverse range of dining options to satisfy every palate.
-              </p>
-            </div>
-
-            <div className='space-y-16'>
-              {diningOptions.map((option) => (
-                <div key={option.id} className='grid md:grid-cols-2 gap-8 items-center'>
-                  <div className='h-80 bg-gray-200 rounded-lg overflow-hidden relative'>
-                    <div className='absolute inset-0 flex items-center justify-center text-gray-500'>
-                      <span className='text-lg'>{option.title} Image</span>
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className='text-2xl font-bold text-gray-900 mb-3'>{option.title}</h3>
-                    <p className='text-gray-600 mb-4'>{option.description}</p>
-                    <div className='mb-4'>
-                      <h4 className='font-semibold text-gray-800 mb-2'>Timings:</h4>
-                      <p className='text-amber-700'>{option.timing}</p>
-                    </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6'>
-                      {option.features.map((feature, index) => (
-                        <div key={index} className='flex items-start'>
-                          <svg
-                            className='h-5 w-5 text-amber-600 mr-2 mt-0.5 flex-shrink-0'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            stroke='currentColor'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              strokeWidth={2}
-                              d='M5 13l4 4L19 7'
-                            />
-                          </svg>
-                          <span className='text-gray-700'>{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <button className='px-6 py-2.5 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition-colors'>
-                      View Menu
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Special Dining Experience */}
-        <section className='py-16 bg-gray-50'>
-          <div className='container mx-auto px-4'>
-            <div className='text-center mb-12'>
-              <h2 className='text-3xl md:text-4xl font-bold text-gray-900 mb-4'>
-                Special Dining Experiences
-              </h2>
-              <div className='w-24 h-1 bg-amber-600 mx-auto mb-6'></div>
-              <p className='text-gray-600 max-w-3xl mx-auto'>
-                Make your stay memorable with our unique dining experiences under the stars or by
-                the pool.
-              </p>
-            </div>
-
-            <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
-              {[
-                {
-                  title: 'Romantic Dinner',
-                  description:
-                    'A private dining experience under the stars, perfect for special occasions.',
-                  image: '/dining/romantic-dinner.jpg',
-                },
-                {
-                  title: 'Rajasthani Thali',
-                  description:
-                    'Experience authentic Rajasthani cuisine with our traditional thali dinner.',
-                  image: '/dining/thali-dinner.jpg',
-                },
-                {
-                  title: 'Poolside BBQ',
-                  description:
-                    'Sizzling barbecue by the pool with live cooking stations and international flavors.',
-                  image: '/dining/bbq-dinner.jpg',
-                },
-              ].map((experience, index) => (
-                <div key={index} className='bg-white rounded-lg overflow-hidden shadow-md'>
-                  <div className='h-48 bg-gray-300 relative'>
-                    <div className='absolute inset-0 flex items-center justify-center text-gray-500'>
-                      {experience.title} Image
-                    </div>
-                  </div>
-                  <div className='p-6'>
-                    <h3 className='text-xl font-bold text-gray-900 mb-2'>{experience.title}</h3>
-                    <p className='text-gray-600 mb-4'>{experience.description}</p>
-                    <button className='text-amber-600 font-medium hover:text-amber-700'>
-                      Learn More →
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

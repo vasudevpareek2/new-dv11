@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Logo from './ui/Logo';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,15 +41,8 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0 h-full flex items-center">
-            <Link href="/" className="block h-full flex items-center">
-              <Image 
-                src="/images/logo.png"
-                alt="Dolce Vita Pushkar" 
-                width={200} 
-                height={80} 
-                className="h-16 w-auto object-contain"
-                priority
-              />
+            <Link href="/" className="h-full flex items-center">
+              <Logo />
             </Link>
           </div>
 

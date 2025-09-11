@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
+import { format } from 'date-fns';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 import { api } from '@/lib/api';
+import { DateRangePicker } from './DateRangePicker';
 
 type PriceTier = {
   guests: number;
@@ -14,11 +16,6 @@ type ContactInfo = {
   name: string;
   email: string;
   phone: string;
-};
-
-type BookingDates = {
-  checkIn: string;
-  checkOut: string;
 };
 
 type BookingPayload = {
@@ -67,7 +64,8 @@ export default function VillaBookingForm({
 
   const [guests, setGuests] = useState(1);
   const [extraMattresses, setExtraMattresses] = useState(0);
-  const [dates, setDates] = useState<BookingDates>({ checkIn: '', checkOut: '' });
+  const [dateRange, setDateRange] = useState<{from: Date, to: Date} | undefined>();
+  const [isLoadingDates, setIsLoadingDates] = useState(false);
   const [contactInfo, setContactInfo] = useState<ContactInfo>({
     name: '',
     email: '',
@@ -109,17 +107,13 @@ export default function VillaBookingForm({
   }, [basePrices, guests]);
 
   const calculateNumberOfNights = useCallback(() => {
-    if (!dates.checkIn || !dates.checkOut) return 0;
+    if (!dateRange?.from || !dateRange?.to) return 0;
+    
+    const timeDiff = dateRange.to.getTime() - dateRange.from.getTime();
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  }, [dateRange]);
 
-    const checkInDate = new Date(dates.checkIn);
-    const checkOutDate = new Date(dates.checkOut);
-    const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
-    const nightCount = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-    return nightCount > 0 ? nightCount : 0;
-  }, [dates.checkIn, dates.checkOut]);
-
-  const calculateTotal = () => {
+  const calculateTotal = useCallback(() => {
     const basePrice = calculateBasePrice();
     const nights = calculateNumberOfNights();
     const extraMattressPrice = hasExtraMattress ? extraMattresses * 2500 : 0;
@@ -132,7 +126,7 @@ export default function VillaBookingForm({
       total: subtotal + gst,
       nights,
     };
-  };
+  }, [calculateBasePrice, calculateNumberOfNights, extraMattresses, hasExtraMattress, guests]);
 
   const { gst, total, nights } = calculateTotal();
 
@@ -162,6 +156,55 @@ export default function VillaBookingForm({
     []
   );
 
+  const handleDateSelect = async (range: {from: Date, to: Date} | undefined) => {
+    // Only update the date range if it's a complete selection (both from and to)
+    if (range?.from && range?.to) {
+      // Check if the date range is valid (at least 1 night)
+      const nights = Math.ceil((range.to.getTime() - range.from.getTime()) / (1000 * 60 * 60 * 24));
+      if (nights < 1) {
+        toast.error('Please select at least 1 night');
+        return;
+      }
+      
+      setIsLoadingDates(true);
+      try {
+        const checkIn = format(range.from, 'yyyy-MM-dd');
+        const checkOut = format(range.to, 'yyyy-MM-dd');
+        
+        const response = await fetch('/api/availability', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            villaId: _villaId,
+            checkIn,
+            checkOut,
+          }),
+        });
+
+        const data = await response.json();
+        
+        if (!data.available) {
+          toast.error('Selected dates are not available. Please choose different dates.');
+          setDateRange(undefined);
+        } else {
+          // Only update the date range if the dates are available
+          setDateRange(range);
+        }
+      } catch (error) {
+        console.error('Error checking availability:', error);
+        toast.error('Failed to check availability. Please try again.');
+        setDateRange(undefined);
+      } finally {
+        setIsLoadingDates(false);
+      }
+    } else if (!range) {
+      // If range is cleared, reset the date range
+      setDateRange(undefined);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -170,10 +213,14 @@ export default function VillaBookingForm({
       return;
     }
 
-    if (!dates.checkIn || !dates.checkOut) {
+    if (!dateRange?.from || !dateRange?.to) {
       toast.error('Please select check-in and check-out dates');
       return;
     }
+    
+    // Convert dates to YYYY-MM-DD format for the API
+    const checkIn = format(dateRange.from, 'yyyy-MM-dd');
+    const checkOut = format(dateRange.to, 'yyyy-MM-dd');
 
     if (!contactInfo.name || !contactInfo.email || !contactInfo.phone) {
       toast.error('Please fill in all contact information');
@@ -190,8 +237,8 @@ export default function VillaBookingForm({
         receipt: `booking_${Date.now()}`,
         notes: {
           villa: villaName,
-          checkIn: dates.checkIn,
-          checkOut: dates.checkOut,
+          checkIn,
+          checkOut,
           guests,
           extraMattresses: hasExtraMattress ? extraMattresses : 0,
           customerName: contactInfo.name,
@@ -277,34 +324,22 @@ export default function VillaBookingForm({
       <h3 className='text-2xl font-bold text-gray-800 mb-6'>Book Your Stay</h3>
 
       <form onSubmit={handleSubmit} className='space-y-6'>
-        {/* Dates */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label htmlFor='checkIn' className='block text-sm font-medium text-gray-700 mb-1'>
-              Check-in
-            </label>
-            <input
-              type='date'
-              id='checkIn'
-              required
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg'
-              value={dates.checkIn}
-              onChange={(e) => setDates({ ...dates, checkIn: e.target.value })}
-            />
-          </div>
-          <div>
-            <label htmlFor='checkOut' className='block text-sm font-medium text-gray-700 mb-1'>
-              Check-out
-            </label>
-            <input
-              type='date'
-              id='checkOut'
-              required
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg'
-              value={dates.checkOut}
-              onChange={(e) => setDates({ ...dates, checkOut: e.target.value })}
-            />
-          </div>
+        {/* Date Range Picker */}
+        <div>
+          <label className='block text-sm font-medium text-gray-700 mb-1'>
+            Select Dates
+          </label>
+          <DateRangePicker
+            villaId={_villaId}
+            onDateSelect={handleDateSelect}
+            className='w-full'
+            disabled={isLoadingDates}
+          />
+          {dateRange?.from && dateRange?.to && (
+            <p className='mt-2 text-sm text-gray-500'>
+              {calculateNumberOfNights()} nights • {format(dateRange.from, 'MMM d, yyyy')} - {format(dateRange.to, 'MMM d, yyyy')}
+            </p>
+          )}
         </div>
 
         {/* Guests */}
@@ -438,16 +473,17 @@ export default function VillaBookingForm({
             type='submit'
             className='w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition-colors'
             disabled={
-              !dates.checkIn ||
-              !dates.checkOut ||
+              !dateRange?.from ||
+              !dateRange?.to ||
               !contactInfo.name ||
               !contactInfo.email ||
               !contactInfo.phone ||
-              isLoading
+              isLoading ||
+              isLoadingDates
             }
           >
-            {!dates.checkIn ||
-            !dates.checkOut ||
+            {!dateRange?.from ||
+            !dateRange?.to ||
             !contactInfo.name ||
             !contactInfo.email ||
             !contactInfo.phone

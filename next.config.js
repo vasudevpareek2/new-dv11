@@ -171,9 +171,14 @@ const nextConfig = {
   },
   // Environment variables that will be available on the client side
   env: {
+    // Public environment variables (exposed to the browser)
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://dolcevitapushkar.com',
     NEXT_PUBLIC_GA_TRACKING_ID: process.env.NEXT_PUBLIC_GA_TRACKING_ID || '',
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
+    
+    // Server-side only environment variables (not exposed to the browser)
+    NOTION_API_KEY: process.env.NOTION_API_KEY,
+    NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
   },
   // Enable static exports for static site generation
   // output: 'export',
