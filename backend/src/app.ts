@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
 import paymentRoutes from './routes/payment.routes';
 
@@ -29,6 +30,7 @@ app.use(
 
 // Middleware
 app.use(helmet()); // Security headers
+app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
@@ -46,6 +48,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // API Routes
+app.use('/api/payments', paymentRoutes);
+
 app.get('/api/health', (_req: Request, res: Response) => {
   res.status(200).json({
     status: 'success',

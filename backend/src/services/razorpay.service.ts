@@ -1,220 +1,236 @@
 import Razorpay from 'razorpay';
 import crypto from 'crypto';
-import { config } from 'dotenv';
+import { v4 as uuidv4 } from 'uuid';
+import { config } from '../config';
 
-// Load environment variables
-config();
-
-// Type definitions for Razorpay order response
-interface RazorpayOrder {
+export interface RazorpayPaymentLinkResponse {
   id: string;
+  short_url: string;
   amount: number;
   currency: string;
+  status: 'created' | 'paid' | 'expired' | 'partially_paid' | 'cancelled';
+  description: string;
+  customer: {
+    name: string;
+    email: string;
+    contact: string;
+  };
+  notes: Record<string, string>;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface RazorpayOrderResponse {
+  id: string;
+  entity: string;
+  amount: number;
+  amount_paid: number;
+  amount_due: number;
+  currency: string;
   receipt: string;
-  status: string;
+  offer_id: string | null;
+  status: 'created' | 'attempted' | 'paid';
+  attempts: number;
+  notes: string[];
   created_at: number;
 }
 
-interface CreateOrderResponse {
-  success: boolean;
-  order?: RazorpayOrder;
-  error?: string;
-  details?: any; // For additional error details
+export interface RazorpayPaymentResponse {
+  id: string;
+  entity: string;
+  amount: number;
+  currency: string;
+  status: 'captured' | 'failed';
+  order_id: string;
+  invoice_id: string | null;
+  international: boolean;
+  method: string;
+  amount_refunded: number;
+  refund_status: string | null;
+  captured: boolean;
+  description: string;
+  card_id: string | null;
+  bank: string | null;
+  wallet: string | null;
+  vpa: string | null;
+  email: string;
+  contact: string;
+  notes: Record<string, string>;
+  fee: number;
+  tax: number;
+  error_code: string | null;
+  error_description: string | null;
+  created_at: number;
 }
 
-interface VerifyPaymentResponse {
-  success: boolean;
-  paymentId?: string;
-  error?: string;
-}
+export class RazorpayService {
+  private razorpay: Razorpay;
 
-// Initialize Razorpay with environment variables
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || '',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || ''
-});
+  constructor() {
+    if (!config.razorpay.keyId || !config.razorpay.keySecret) {
+      throw new Error('Razorpay keyId and keySecret are required');
+    }
 
-// Verify Razorpay configuration
-if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-  console.error('Error: Razorpay credentials are not properly configured in environment variables');
-  console.log('Current RAZORPAY_KEY_ID exists:', !!process.env.RAZORPAY_KEY_ID);
-  console.log('Current RAZORPAY_KEY_SECRET exists:', !!process.env.RAZORPAY_KEY_SECRET);
-}
+    this.razorpay = new Razorpay({
+      key_id: config.razorpay.keyId,
+      key_secret: config.razorpay.keySecret,
+    });
+  }
 
-class RazorpayService {
-  async createOrder(amount: number, currency: string = 'INR'): Promise<CreateOrderResponse> {
-    console.log('🔵 [Razorpay Service] ====== CREATE ORDER ======');
-    console.log('🔵 [Razorpay Service] Amount:', amount, 'Currency:', currency);
-    
+  async createPaymentLink(params: {
+    amount: number;
+    currency: string;
+    customer: {
+      name: string;
+      email: string;
+      contact: string;
+    };
+    description: string;
+    notes?: Record<string, string>;
+  }): Promise<RazorpayPaymentLinkResponse> {
     try {
-      // Verify credentials are set
-      if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
-        const error = new Error('Razorpay credentials not configured in environment variables');
-        console.error('❌ [Razorpay Service] Error:', error.message);
-        console.log('🔍 [Razorpay Service] RAZORPAY_KEY_ID exists:', !!process.env.RAZORPAY_KEY_ID);
-        console.log('🔍 [Razorpay Service] RAZORPAY_KEY_SECRET exists:', !!process.env.RAZORPAY_KEY_SECRET);
-        throw error;
-      }
-
-      // Validate amount
-      if (isNaN(amount) || amount <= 0) {
-        const error = new Error(`Invalid amount: ${amount}. Amount must be a positive number`);
-        console.error('❌ [Razorpay Service] Validation error:', error.message);
-        throw error;
-      }
-      
-      console.log('🔵 [Razorpay Service] Credentials verified and amount validated');
-
-      // Amount is already in paise (smallest currency unit) from the frontend
-      const options = {
-        amount: Math.round(amount), // No need to multiply by 100, already in paise
-        currency: currency || 'INR',
-        receipt: `rcpt_${Date.now()}`,
-        payment_capture: 1,
-        notes: {
-          source: 'dolce-vita-villas',
-          created_at: new Date().toISOString(),
-          environment: process.env.NODE_ENV || 'development'
-        }
-      };
-
-      console.log(' Razorpay order options:', {
-        amount: options.amount,
-        currency: options.currency,
-        receipt: options.receipt,
-        key_id: process.env.RAZORPAY_KEY_ID ? '***' + process.env.RAZORPAY_KEY_ID.slice(-4) : 'not set',
-        environment: process.env.NODE_ENV || 'development'
+      const paymentLink = await this.razorpay.paymentLink.create({
+        amount: params.amount * 100, // Convert to paise
+        currency: params.currency,
+        accept_partial: false,
+        description: params.description,
+        customer: {
+          name: params.customer.name,
+          email: params.customer.email,
+          contact: params.customer.contact,
+        },
+        notify: {
+          sms: true,
+          email: true,
+        },
+        reminder_enable: true,
+        notes: params.notes || {},
+        callback_url: `${config.appUrl}/payment/callback`,
+        callback_method: 'get',
       });
 
-      console.log(' Sending request to Razorpay API...');
-      const order = await razorpay.orders.create(options) as RazorpayOrder;
-      
-      if (!order || !order.id) {
-        const error = new Error('Failed to create order: Invalid response from Razorpay');
-        console.error(' Error:', error.message);
-        console.error(' Razorpay response:', order);
-        throw error;
-      }
-      
-      console.log(' Successfully created Razorpay order:', {
-        orderId: order.id,
-        amount: order.amount,
-        currency: order.currency,
-        status: order.status
-      });
-      
-      return { 
-        success: true, 
-        order 
+      return {
+        id: String(paymentLink.id),
+        short_url: String(paymentLink.short_url),
+        amount: Number(paymentLink.amount) / 100, // Convert back to rupees
+        currency: String(paymentLink.currency),
+        status: paymentLink.status as 'created' | 'paid' | 'expired' | 'partially_paid' | 'cancelled',
+        description: String(paymentLink.description || ''),
+        customer: {
+          name: String(paymentLink.customer?.name || ''),
+          email: String(paymentLink.customer?.email || ''),
+          contact: String(paymentLink.customer?.contact || ''),
+        },
+        notes: typeof paymentLink.notes === 'object' && paymentLink.notes !== null 
+          ? (paymentLink.notes as Record<string, string>)
+          : {},
+        created_at: Number(paymentLink.created_at || Math.floor(Date.now() / 1000)),
+        updated_at: Number(paymentLink.updated_at || Math.floor(Date.now() / 1000)),
       };
-      
-    } catch (error: any) {
-      console.error(' [Razorpay Service] Error in createOrder:', {
-        name: error.name,
-        message: error.message,
-        code: error.code,
-        statusCode: error.statusCode,
-        isAxiosError: error.isAxiosError,
-        config: error.config ? {
-          url: error.config.url,
-          method: error.config.method,
-          headers: error.config.headers ? Object.keys(error.config.headers) : undefined,
-          data: error.config.data
-        } : undefined,
-        response: error.response ? {
-          status: error.response.status,
-          statusText: error.response.statusText,
-          data: error.response.data
-        } : undefined
-      });
-      
-      // Extract meaningful error message
-      let errorMessage = 'Failed to create payment order';
-      let errorDetails: any = error.message;
-      
-      if (error.error) {
-        // Handle Razorpay error response
-        console.error(' Razorpay error details:', error.error);
-        if (error.error.description) {
-          errorMessage = error.error.description;
-        } else if (error.error.error) {
-          errorMessage = error.error.error.description || JSON.stringify(error.error.error);
-        }
-        errorDetails = error.error;
-      } else if (error.response?.data) {
-        // Handle HTTP error response
-        console.error(' HTTP error response:', error.response.data);
-        errorMessage = error.response.data.error?.message || error.response.data.message || errorMessage;
-        errorDetails = error.response.data;
-      }
-      
-      return { 
-        success: false, 
-        error: errorMessage,
-        details: errorDetails
-      };
+    } catch (error) {
+      console.error('Error creating Razorpay payment link:', error);
+      throw new Error('Failed to create payment link');
     }
   }
 
-  async verifyPayment(
-    razorpayOrderId: string, 
-    razorpayPaymentId: string, 
-    razorpaySignature: string
-  ): Promise<VerifyPaymentResponse> {
+  async verifyWebhookSignature(
+    webhookBody: any,
+    signature: string
+  ): Promise<boolean> {
     try {
-      if (!process.env.RAZORPAY_KEY_SECRET) {
-        throw new Error('Razorpay credentials not configured');
+      if (!config.razorpay.webhookSecret) {
+        throw new Error('Razorpay webhook secret is not configured');
       }
 
-      if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
-        throw new Error('Missing required payment verification parameters');
-      }
-
-      const text = `${razorpayOrderId}|${razorpayPaymentId}`;
       const generatedSignature = crypto
-        .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+        .createHmac('sha256', config.razorpay.webhookSecret)
+        .update(JSON.stringify(webhookBody))
+        .digest('hex');
+
+      return generatedSignature === signature;
+    } catch (error) {
+      console.error('Error verifying webhook signature:', error);
+      return false;
+    }
+  }
+
+  async capturePayment(paymentId: string, amount: number): Promise<boolean> {
+    try {
+      await this.razorpay.payments.capture(paymentId, amount * 100, 'INR'); // Convert to paise and specify currency
+      return true;
+    } catch (error) {
+      console.error('Error capturing payment:', error);
+      return false;
+    }
+  }
+
+  async createOrder(amount: number, currency: string = 'INR'): Promise<RazorpayOrderResponse> {
+    try {
+      const options = {
+        amount: Math.round(amount * 100), // Convert to paise and ensure it's an integer
+        currency,
+        receipt: `order_${uuidv4()}`,
+        payment_capture: 1,
+      };
+
+      const order = await this.razorpay.orders.create(options);
+      
+      // Transform the response to match our interface
+      const transformedOrder: RazorpayOrderResponse = {
+        id: order.id,
+        entity: order.entity,
+        amount: Number(order.amount),
+        amount_paid: Number(order.amount_paid || 0),
+        amount_due: Number(order.amount_due || order.amount),
+        currency: order.currency,
+        receipt: order.receipt || '',
+        offer_id: order.offer_id || null,
+        status: order.status as 'created' | 'attempted' | 'paid',
+        attempts: order.attempts || 0,
+        notes: Array.isArray(order.notes) ? order.notes : [],
+        created_at: order.created_at || Math.floor(Date.now() / 1000),
+      };
+      
+      return transformedOrder;
+    } catch (error) {
+      console.error('Error creating Razorpay order:', error);
+      throw new Error('Failed to create order');
+    }
+  }
+
+  async verifyPayment(orderId: string, paymentId: string, signature: string): Promise<boolean> {
+    try {
+      const text = orderId + '|' + paymentId;
+      const generatedSignature = crypto
+        .createHmac('sha256', config.razorpay.keySecret)
         .update(text)
         .digest('hex');
 
-      const isValid = crypto.timingSafeEqual(
-        Buffer.from(generatedSignature, 'utf8'),
-        Buffer.from(razorpaySignature, 'utf8')
-      );
-      
-      if (!isValid) {
-        console.warn('Invalid payment signature:', { 
-          orderId: razorpayOrderId,
-          paymentId: razorpayPaymentId,
-          expectedSignature: generatedSignature,
-          receivedSignature: razorpaySignature
-        });
-        return { 
-          success: false, 
-          error: 'Invalid payment signature' 
-        };
-      }
-      
-      // Optionally fetch and verify payment details
-      // const payment = await razorpay.payments.fetch(razorpayPaymentId);
-      // if (payment.status !== 'captured') {
-      //   return { 
-      //     success: false, 
-      //     error: `Payment status is ${payment.status}` 
-      //   };
-      // }
-      
-      return { 
-        success: true, 
-        paymentId: razorpayPaymentId 
-      };
-    } catch (error: any) {
+      return generatedSignature === signature;
+    } catch (error) {
       console.error('Error verifying payment:', error);
-      return { 
-        success: false, 
-        error: error.message || 'Failed to verify payment' 
-      };
+      return false;
+    }
+  }
+
+  async fetchPayment(paymentId: string): Promise<RazorpayPaymentResponse | null> {
+    try {
+      const payment = await this.razorpay.payments.fetch(paymentId);
+      // Transform the response to match our interface
+      return {
+        ...payment,
+        amount: Number(payment.amount),
+        amount_refunded: Number(payment.amount_refunded),
+        fee: Number(payment.fee || 0),
+        tax: Number(payment.tax || 0),
+        created_at: payment.created_at || Math.floor(Date.now() / 1000),
+        notes: payment.notes || {},
+      } as RazorpayPaymentResponse;
+    } catch (error) {
+      console.error('Error fetching payment:', error);
+      return null;
     }
   }
 }
 
-export default new RazorpayService();
+export const razorpayService = new RazorpayService();

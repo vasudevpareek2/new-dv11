@@ -195,8 +195,11 @@ export default function VillaBookingForm({
     try {
       setIsLoading(true);
 
+      // Convert total amount to paise (smallest currency unit) for Razorpay
+      const amountInPaise = Math.round(total * 100);
+      
       const requestPayload: BookingPayload = {
-        amount: total , // Convert to paise
+        amount: amountInPaise,
         currency: 'INR',
         receipt: `booking_${Date.now()}`,
         notes: {
