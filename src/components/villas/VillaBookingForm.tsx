@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 import { format } from 'date-fns';
 import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
+import { sendWhatsAppMessage, WhatsAppTemplates } from '@/lib/whatsappService';
+// Invoice generator will be dynamically imported when needed
 import { api } from '@/lib/api';
 import { DateRangePicker } from './DateRangePicker';
 
@@ -130,9 +132,41 @@ export default function VillaBookingForm({
 
   const { gst, total, nights } = calculateTotal();
 
+  // Helper function to send WhatsApp notification
+  const sendBookingNotification = async (
+    phoneNumber: string,
+    isSuccess: boolean,
+    bookingDetails?: {
+      bookingId?: string;
+      amount?: number;
+      checkInDate?: string;
+      checkOutDate?: string;
+      villaName?: string;
+    }
+  ) => {
+    try {
+      const message = isSuccess
+        ? WhatsAppTemplates.paymentSuccess(bookingDetails?.bookingId || '')
+        : WhatsAppTemplates.paymentFailed(bookingDetails?.bookingId || '');
+
+      const result = await sendWhatsAppMessage({
+        to: phoneNumber,
+        message,
+        bookingDetails: isSuccess ? bookingDetails : undefined,
+      });
+
+      if (!result.success) {
+        console.warn('Failed to send WhatsApp notification:', result.error);
+      }
+    } catch (error) {
+      console.error('Error sending WhatsApp notification:', error);
+    }
+  };
+
   const handlePaymentSuccess = useCallback(
     async (response: RazorpayPaymentSuccess & { bookingId?: string }) => {
       console.log('Payment successful:', response);
+      let bookingId = response.bookingId;
 
       try {
         const { data, error: verifyError } = await api.post<any>('/payments/verify', {
@@ -145,15 +179,107 @@ export default function VillaBookingForm({
         if (verifyError || !data) {
           throw new Error(verifyError?.message || 'Payment verification failed');
         }
+        
+        bookingId = data.bookingId || bookingId;
+        
+        // Generate and download invoice after successful payment verification
+        if (dateRange?.from && dateRange?.to) {
+          try {
+            // Calculate number of nights
+            const nights = Math.ceil((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24));
+            
+            // Calculate base price based on the first tier that matches the number of guests
+            const basePrice = basePrices?.find(tier => guests <= tier.guests)?.price || 0;
+            const subtotal = basePrice * nights;
+            const taxRate = 18; // 18% GST
+            const taxAmount = Math.round((subtotal * taxRate) / 100);
+            const total = subtotal + taxAmount;
 
-        toast.success('Booking confirmed! We will contact you shortly.');
+            // Prepare invoice data for the invoice generator
+            const invoiceData = {
+              customerName: contactInfo.name,
+              customerEmail: contactInfo.email,
+              customerPhone: contactInfo.phone,
+              villaName: villaName,
+              checkInDate: format(dateRange.from, 'yyyy-MM-dd'),
+              checkOutDate: format(dateRange.to, 'yyyy-MM-dd'),
+              paymentMethod: 'Razorpay',
+              paymentId: response.razorpay_payment_id,
+              amountPaid: total,
+              // Additional data for the invoice
+              nights: nights,
+              basePrice: basePrice,
+              subtotal: subtotal,
+              taxRate: taxRate,
+              taxAmount: taxAmount
+            };
+
+            // Dynamically import and use the invoice generator
+            const { generateAndDownloadInvoice } = await import('@/lib/invoiceGenerator');
+            
+            const invoicePayload = {
+              customerName: invoiceData.customerName,
+              customerEmail: invoiceData.customerEmail,
+              customerPhone: invoiceData.customerPhone,
+              villaName: invoiceData.villaName,
+              checkInDate: invoiceData.checkInDate,
+              checkOutDate: invoiceData.checkOutDate,
+              nights: invoiceData.nights,
+              items: [{
+                description: `Villa Booking (${invoiceData.nights} nights)`,
+                quantity: 1,
+                unitPrice: invoiceData.basePrice,
+                amount: invoiceData.subtotal,
+              }],
+              subtotal: invoiceData.subtotal,
+              taxRate: invoiceData.taxRate,
+              taxAmount: invoiceData.taxAmount,
+              total: invoiceData.amountPaid,
+              paymentMethod: invoiceData.paymentMethod,
+              paymentStatus: 'Paid' as const,
+              paymentId: invoiceData.paymentId,
+            };
+
+            // @ts-ignore - We know the data matches the expected interface
+            await generateAndDownloadInvoice(invoicePayload);
+            // Send WhatsApp notification for successful payment
+            await sendBookingNotification(contactInfo.phone, true, {
+              bookingId: bookingId || 'N/A',
+              amount: total,
+              checkInDate: format(dateRange.from, 'yyyy-MM-dd'),
+              checkOutDate: format(dateRange.to, 'yyyy-MM-dd'),
+              villaName: villaName,
+            });
+            
+            toast.success('Booking confirmed! Your invoice has been downloaded.');
+          } catch (invoiceError) {
+            console.error('Error generating invoice:', invoiceError);
+            // Still send WhatsApp notification even if invoice generation fails
+            await sendBookingNotification(contactInfo.phone, true, {
+              bookingId: bookingId || 'N/A',
+              amount: total,
+              checkInDate: format(dateRange.from, 'yyyy-MM-dd'),
+              checkOutDate: format(dateRange.to, 'yyyy-MM-dd'),
+              villaName: villaName,
+            });
+            toast.success('Booking confirmed! There was an issue generating the invoice. Please contact support.');
+          }
+        } else {
+          toast.success('Booking confirmed! We will contact you shortly.');
+        }
+
+        // Reset form
+        setDateRange(undefined);
+        setGuests(1);
+        if (hasExtraMattress) setExtraMattresses(0);
+        setContactInfo({ name: '', email: '', phone: '' });
       } catch (error) {
         console.error('Payment verification error:', error);
         const errorMessage = error instanceof Error ? error.message : 'Failed to verify payment';
         toast.error(errorMessage);
       }
     },
-    []
+    [contactInfo.email, contactInfo.name, contactInfo.phone, dateRange?.from, dateRange?.to, hasExtraMattress, total, villaName]
   );
 
   const handleDateSelect = async (range: {from: Date, to: Date} | undefined) => {
@@ -303,10 +429,21 @@ export default function VillaBookingForm({
 
       const razorpay = new window.Razorpay(options);
 
-      razorpay.on('payment.failed', (response: { error: { description?: string } }) => {
+      razorpay.on('payment.failed', async (response: { error: { description?: string } }) => {
         console.error('Payment failed:', response.error);
         const errorMessage = response.error?.description || 'Payment failed. Please try again.';
         toast.error(errorMessage);
+        
+        // Send WhatsApp notification for failed payment
+        try {
+          await sendBookingNotification(contactInfo.phone, false, {
+            bookingId: data?.bookingId || 'N/A',
+            amount: total,
+            villaName: villaName,
+          });
+        } catch (error) {
+          console.error('Failed to send payment failure notification:', error);
+        }
       });
 
       razorpay.open();

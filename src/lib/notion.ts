@@ -7,7 +7,6 @@ if (!process.env.NOTION_API_KEY) {
 if (!process.env.NOTION_DATABASE_ID) {
   throw new Error('NOTION_DATABASE_ID is not set');
 }
-
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
