@@ -24,18 +24,8 @@ const nextConfig = {
   experimental: {
     // Enable server components external packages
     serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
-    // Enable React 18 concurrent features
-    // concurrentFeatures: true,
     // Enable webpack build worker
     webpackBuildWorker: true,
-    // Enable standalone output for better serverless deployment
-    output: 'standalone',
-  },
-  // Configure API routes to be handled by the Node.js server
-  api: {
-    bodyParser: {
-      sizeLimit: '1mb',
-    },
   },
   // Configure serverless function configuration
   // serverRuntimeConfig: {
