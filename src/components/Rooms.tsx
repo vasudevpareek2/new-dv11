@@ -85,21 +85,25 @@ export default function Rooms() {
                     <span className="text-gray-500">Image not available</span>
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-                
-                {/* Text Overlay */}
-                <div className="absolute left-1/2 bottom-20 transform -translate-x-1/2 w-full px-6 text-center">
-                  <p className="text-white text-lg md:text-xl font-light italic mb-4">
-                    {room.id === 'rosa' 
-                      ? 'A romantic hideaway for couples, where elegance meets intimacy.'
-                      : room.id === 'casa-mia' 
-                        ? 'Serene villa - A tranquil escape for family and friends.'
-                        : 'The perfect destination for memorable reunions and milestones.'}
-                  </p>
-                  <h3 className="text-3xl md:text-4xl font-bold text-white font-serif tracking-wide">
-                    {room.name}
-                    <div className="w-20 h-0.5 bg-amber-400 mx-auto mt-3 mb-4"></div>
-                  </h3>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-transparent">
+                  {/* Villa Name at Top */}
+                  <div className="absolute left-1/2 top-10 transform -translate-x-1/2 w-full px-6 text-center">
+                    <h3 className="text-3xl md:text-4xl font-bold text-white font-serif tracking-wide">
+                      {room.name}
+                      <div className="w-20 h-0.5 bg-amber-400 mx-auto mt-3 mb-4"></div>
+                    </h3>
+                  </div>
+                  
+                  {/* Tagline at Bottom */}
+                  <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 w-full px-6 pb-8 text-center">
+                    <p className="text-white text-lg md:text-xl font-light italic mb-4">
+                      {room.id === 'rosa' 
+                        ? 'A romantic hideaway for couples, where elegance meets intimacy.'
+                        : room.id === 'casa-mia' 
+                          ? 'Serene villa - A tranquil escape for family and friends.'
+                          : 'The perfect destination for memorable reunions and milestones.'}
+                    </p>
+                  </div>
                 </div>
               </div>
               <div className="p-6 bg-white flex justify-center">
