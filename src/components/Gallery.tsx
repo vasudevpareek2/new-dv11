@@ -1,7 +1,25 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
+
+// Workaround for Next.js Image component type issues
+type ImageProps = {
+  src: string | StaticImageData;
+  alt: string;
+  width?: number | string;
+  height?: number | string;
+  fill?: boolean;
+  className?: string;
+  sizes?: string;
+  priority?: boolean;
+  loading?: 'lazy' | 'eager';
+  quality?: number | string;
+  placeholder?: 'blur' | 'empty';
+  blurDataURL?: string;
+  unoptimized?: boolean;
+  onLoadingComplete?: (img: HTMLImageElement) => void;
+};
 
 type GalleryImage = {
   id: number;
@@ -173,6 +191,7 @@ export default function Gallery() {
                 fill
                 className="object-cover transition-all duration-700 group-hover:scale-110"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                unoptimized={process.env.NODE_ENV !== 'production'}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
                 <div className="w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">

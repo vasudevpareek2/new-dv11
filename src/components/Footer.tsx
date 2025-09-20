@@ -85,7 +85,7 @@ export default function Footer() {
                 <div className="bg-primary-100 p-1.5 rounded-full text-primary-600 mr-2">
                   <i className="fas fa-map-marker-alt text-xs"></i>
                 </div>
-                <span className="text-sm text-gray-600">123 Luxury Villa Lane, Pushkar, Rajasthan 305022, India</span>
+                <span className="text-sm text-gray-600">Building No./Flat No.: Khasra no 3133/3127<br/>Name Of Premises/Building: Samla Ki Dhani<br/>Road/Street: Kaharo Ka Chouraha<br/>City/Town/Village: Pushkar<br/>District: Ajmer<br/>State: Rajasthan<br/>PIN Code: 305022</span>
               </li>
               <li className="flex items-start">
                 <div className="bg-primary-100 p-1.5 rounded-full text-primary-600 mr-2">

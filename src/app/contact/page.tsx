@@ -88,9 +88,13 @@ export default function ContactPage() {
                   <div className="ml-4">
                     <h3 className="text-lg font-medium text-gray-900">Location</h3>
                     <p className="mt-1 text-gray-600">
-                      123 Luxury Villa Lane,<br />
-                      Pushkar, Rajasthan 305022,<br />
-                      India
+                      Building No./Flat No.: Khasra no 3133/3127<br />
+                      Name Of Premises/Building: Samla Ki Dhani<br />
+                      Road/Street: Kaharo Ka Chouraha<br />
+                      City/Town/Village: Pushkar<br />
+                      District: Ajmer<br />
+                      State: Rajasthan<br />
+                      PIN Code: 305022
                     </p>
                   </div>
                 </div>
