@@ -16,39 +16,39 @@ type Testimonial = {
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: 'Rahul Sharma',
+    name: 'Rohit K.',
     location: 'Mumbai, India',
     rating: 5,
-    content: 'Our stay at Dolce Vita was absolutely magical! The villa was luxurious, the staff was incredibly attentive, and the location was perfect. We can\'t wait to come back!',
+    content: 'Exceptional stay at Dolce Vita! The villas are beautifully designed with attention to detail. The staff was incredibly welcoming and made our stay memorable. The location is perfect - peaceful yet close to Pushkar attractions.',
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-    date: 'March 2025'
+    date: 'August 2023'
   },
   {
     id: 2,
-    name: 'Priya Patel',
+    name: 'Priya M.',
     location: 'Delhi, India',
     rating: 5,
-    content: 'The perfect romantic getaway! The private pool was our favorite spot. The attention to detail in the villa was impressive, and the staff went above and beyond to make our anniversary special.',
-    image: '',
-    date: 'February 2025'
+    content: 'A perfect blend of luxury and comfort. The private pool villa was stunning, and the service was impeccable. The staff went above and beyond to make our anniversary special. Highly recommended for a romantic getaway!',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+    date: 'July 2023'
   },
   {
     id: 3,
     name: 'Amit & Neha',
     location: 'Bangalore, India',
-    rating: 4,
-    content: 'Beautiful property with excellent service. The villa was spacious and clean, and the food was delicious. Would definitely recommend for a peaceful retreat.',
+    rating: 5,
+    content: 'The best hospitality we\'ve experienced in a long time. The villas are spacious, clean, and beautifully decorated. The food was delicious, and the staff was always ready to help. Will definitely come back!',
     image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-    date: 'January 2025'
+    date: 'June 2023'
   },
   {
     id: 4,
-    name: 'David Wilson',
+    name: 'Sarah W.',
     location: 'London, UK',
     rating: 5,
-    content: 'One of the best places we\'ve stayed in India. The combination of luxury and authentic local experience was perfect. The staff arranged wonderful tours for us.',
+    content: 'An absolute gem in Pushkar! The property is stunning, and the service is top-notch. The staff arranged wonderful cultural experiences for us. The perfect place to experience Rajasthani hospitality at its finest.',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-    date: 'December 2024'
+    date: 'May 2023'
   },
 ];
 
@@ -176,12 +176,12 @@ export default function Testimonials() {
 
         <div className="text-center mt-12">
           <a 
-            href="https://www.tripadvisor.com/ShowUserReviews-g319729-d33269651-r1016185722-DOLCE_VITA-Pushkar_Ajmer_District_Rajasthan.html" 
+            href="https://www.google.com/travel/search?q=google%20reviews%20dolcevita%20pushkar&g2lb=4965990%2C4969803%2C72302247%2C72317059%2C72414906%2C72471280%2C72472051%2C72485658%2C72560029%2C72573224%2C72616120%2C72647020%2C72686036%2C72803964%2C72882230%2C72958624%2C72959983%2C72990342%2C73059275%2C73064216%2C73064764%2C73076417%2C73107088&hl=en-IN&gl=in&ssta=1&ts=CAEaRwopEicyJTB4Mzk2YmRkMDAyYTgzODVmNzoweDQ5Y2VkMTdjM2NhZGU5NTASGhIUCgcI6Q8QCRgXEgcI6Q8QCRgYGAEyAhAA&qs=CAEyE0Nnb0kwTkszNWNPdnRPZEpFQUU4AkIJCVDprTx80c5JQgkJUOmtPHzRzkk&ap=ugEHcmV2aWV3cw&ictx=111&ved=0CAAQ5JsGahcKEwig8unE4uaPAxUAAAAAHQAAAAAQBA"
             target="_blank" 
             rel="noopener noreferrer"
             className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-black hover:bg-gray-800 transition-colors duration-300"
           >
-            Read More Reviews
+            Read More Reviews on Google
             <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
