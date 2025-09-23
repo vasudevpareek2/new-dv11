@@ -179,7 +179,7 @@ const InvoiceDocument: React.FC<InvoiceProps> = ({
           <Text>123 Villa Street</Text>
           <Text>Pushkar, Rajasthan 305022</Text>
           <Text>India</Text>
-          <Text>+91 98765 43210</Text>
+          <Text>+91 87420 00006</Text>
           <Text>bookings@dolcevitapushkar.com</Text>
         </View>
       </View>
@@ -280,7 +280,7 @@ const InvoiceDocument: React.FC<InvoiceProps> = ({
       <View style={styles.footer}>
         <Text>
           This is a computer-generated invoice. For any queries, please contact us at
-          bookings@dolcevitapushkar.com or call +91 98765 43210
+          bookings@dolcevitapushkar.com or call +91 87420 00006
         </Text>
       </View>
     </Page>

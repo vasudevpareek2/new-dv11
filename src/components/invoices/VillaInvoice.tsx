@@ -182,7 +182,7 @@ const VillaInvoice: React.FC<VillaInvoiceProps> = ({
             <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 5 }}>Dolce Vita Pushkar</Text>
             <Text style={styles.value}>123 Villa Street, Pushkar</Text>
             <Text style={styles.value}>Rajasthan, India 305022</Text>
-            <Text style={styles.value}>+91 98765 43210</Text>
+            <Text style={styles.value}>+91 87420 00006</Text>
             <Text style={styles.value}>bookings@dolcevitapushkar.com</Text>
           </View>
         </View>
@@ -297,7 +297,7 @@ const VillaInvoice: React.FC<VillaInvoiceProps> = ({
         
         {/* Footer */}
         <View style={styles.footer}>
-          <Text>This is a computer-generated invoice. For any queries, please contact us at bookings@dolcevitapushkar.com or call +91 98765 43210</Text>
+          <Text>This is a computer-generated invoice. For any queries, please contact us at bookings@dolcevitapushkar.com or call +91 87420 00006</Text>
         </View>
       </Page>
     </Document>
