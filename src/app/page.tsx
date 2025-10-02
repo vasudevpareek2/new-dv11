@@ -9,15 +9,15 @@ import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className='min-h-screen'>
       <Header />
-      <div className="relative">
+      <div className='relative'>
         <Hero />
-        <div className="container mx-auto px-4 mt-12 md:mt-16">
+        <div className='container mx-auto px-4 mt-12 md:mt-16'>
           <BookingForm />
         </div>
       </div>
-      <div className="relative -mt-8 md:-mt-12">
+      <div className='relative -mt-8 md:-mt-12'>
         <About />
       </div>
       <Rooms />

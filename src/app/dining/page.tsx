@@ -69,25 +69,25 @@ const diningOptions: DiningOption[] = [
 
 export default function DiningPage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className='min-h-screen flex flex-col'>
       <Header />
-      <main className="flex-grow flex items-center justify-center bg-gray-50">
-        <div className="text-center px-4 py-20 max-w-4xl mx-auto">
-          <div className="mb-8">
-            <div className="w-24 h-1 bg-amber-500 mx-auto mb-6"></div>
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-serif">
+      <main className='flex-grow flex items-center justify-center bg-gray-50'>
+        <div className='text-center px-4 py-20 max-w-4xl mx-auto'>
+          <div className='mb-8'>
+            <div className='w-24 h-1 bg-amber-500 mx-auto mb-6' />
+            <h1 className='text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-serif'>
               Coming Soon
             </h1>
-            <div className="w-24 h-1 bg-amber-500 mx-auto my-6"></div>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8">
-              We're crafting an exceptional dining experience for you.
+            <div className='w-24 h-1 bg-amber-500 mx-auto my-6' />
+            <p className='text-xl md:text-2xl text-gray-600 mb-8'>
+              We&apos;re crafting an exceptional dining experience for you.
             </p>
-            <p className="text-gray-500 max-w-2xl mx-auto mb-8">
+            <p className='text-gray-500 max-w-2xl mx-auto mb-8'>
               Our culinary team is working hard to bring you a unique dining experience that combines local flavors with international cuisine. Please check back soon for updates.
             </p>
             <a 
-              href="/contact" 
-              className="inline-block bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-8 rounded-full transition-colors duration-300"
+              href='/contact' 
+              className='inline-block bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-8 rounded-full transition-colors duration-300'
             >
               Contact Us
             </a>
