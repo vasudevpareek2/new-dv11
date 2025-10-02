@@ -1,20 +1,6 @@
 /** @type {import('next').NextConfig} */
 const webpack = require('webpack');
-const path = require('path');
-
 const nextConfig = {
-  typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
   reactStrictMode: true,
   swcMinify: true,
   images: {
@@ -24,17 +10,22 @@ const nextConfig = {
       'www.dolcevitapushkar.com',
       'images.unsplash.com',
       'via.placeholder.com',
-      'api.dolcevitapushkar.com'
+      'api.dolcevitapushkar.com',
+      
     ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/webp'],
     minimumCacheTTL: 60 * 60 * 24 * 7, // 1 week
     dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     unoptimized: process.env.NODE_ENV !== 'production',
   },
   experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs']
+    // Enable server components external packages
+    serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
+    // Enable webpack build worker
+    webpackBuildWorker: true,
   },
   // Configure serverless function configuration
   // serverRuntimeConfig: {
@@ -47,10 +38,6 @@ const nextConfig = {
   // },
   webpack: (config, { isServer, dev }) => {
     // Add custom webpack configurations here
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-    };
 
     // Add environment variables to the client-side bundle
     // config.plugins.push(
@@ -174,14 +161,9 @@ const nextConfig = {
   },
   // Environment variables that will be available on the client side
   env: {
-    // Public environment variables (exposed to the browser)
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://dolcevitapushkar.com',
     NEXT_PUBLIC_GA_TRACKING_ID: process.env.NEXT_PUBLIC_GA_TRACKING_ID || '',
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '',
-    
-    // Server-side only environment variables (not exposed to the browser)
-    NOTION_API_KEY: process.env.NOTION_API_KEY,
-    NOTION_DATABASE_ID: process.env.NOTION_DATABASE_ID,
   },
   // Enable static exports for static site generation
   // output: 'export',

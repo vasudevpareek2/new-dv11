@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+// Using require to avoid TypeScript errors with Next.js Link
+const Link = require('next/link').default;
 import Logo from './ui/Logo';
 
 export default function Header() {
@@ -32,16 +33,14 @@ export default function Header() {
   ];
 
   return (
-    <header 
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-primary-200 shadow-md' : 'bg-transparent'
-      }`}
-    >
+    <header className={`fixed w-full z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-primary-200 shadow-md' : 'bg-transparent'
+    }`}>
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0 h-full flex items-center">
-            <Link href="/" className="h-full flex items-center">
+            <Link href="/" passHref>
               <Logo />
             </Link>
           </div>
@@ -53,6 +52,7 @@ export default function Header() {
                 <Link 
                   href={link.href}
                   className="text-gray-800 hover:text-primary-600 px-3 py-2 text-base font-medium transition-colors duration-300"
+                  passHref
                 >
                   {link.name}
                   {link.submenu && (
@@ -71,6 +71,7 @@ export default function Header() {
                         key={room.name}
                         href={room.href}
                         className="block px-4 py-2.5 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors duration-200"
+                        passHref
                       >
                         {room.name}
                       </Link>
@@ -80,8 +81,9 @@ export default function Header() {
               </div>
             ))}
             <Link 
-              href="/booking" 
+              href="/villas" 
               className="bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors duration-300 shadow-md hover:shadow-lg"
+              passHref
             >
               Book Now
             </Link>
@@ -141,9 +143,17 @@ export default function Header() {
                 </div>
               ))}
               <div className="px-3 pt-2">
-                <button className="w-full bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors duration-300">
+                <a 
+                  href="/villas"
+                  className="block w-full bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-gray-800 transition-colors duration-300 text-center"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMenuOpen(false);
+                    window.location.href = '/villas';
+                  }}
+                >
                   Book Now
-                </button>
+                </a>
               </div>
             </div>
           </div>

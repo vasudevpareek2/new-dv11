@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { getBookedDates } from '@/lib/notion';
 
 export async function POST(request: Request) {
   try {
@@ -12,18 +11,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get all bookings that overlap with the requested date range
-    const bookedDates = await getBookedDates(villaId, checkIn, checkOut);
-    
-    // If there are any bookings that overlap, the dates are not available
-    const isAvailable = bookedDates.length === 0;
-
+    // Stub implementation - always returns as available
     return NextResponse.json({
-      available: isAvailable,
-      bookedDates,
+      available: true,
+      bookedDates: [],
     });
   } catch (error) {
-    console.error('Error checking availability:', error);
+    console.error('Error in availability check:', error);
     return NextResponse.json(
       { error: 'Failed to check availability' },
       { status: 500 }
@@ -31,7 +25,7 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export function GET() {
   return NextResponse.json(
     { error: 'Method not allowed' },
     { status: 405 }

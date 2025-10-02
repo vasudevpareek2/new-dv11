@@ -23,7 +23,7 @@ export default function BookingForm() {
   const today = format(new Date(), 'yyyy-MM-dd');
   const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!villaId) {
       alert('Please select a villa');
@@ -36,28 +36,8 @@ export default function BookingForm() {
       return;
     }
 
-    // Handle form submission
-    console.log({
-      villaId,
-      villaName: selectedVilla?.name || '',
-      checkIn,
-      checkOut,
-      adults,
-      children,
-      totalGuests,
-      promoCode,
-    });
-
-    // Redirect to the specific villa's booking page with parameters
-    const params = new URLSearchParams({
-      checkIn,
-      checkOut,
-      adults: adults.toString(),
-      children: children.toString(),
-      ...(promoCode && { promoCode }),
-    });
-
-    window.location.href = `/villas/${villaId}?${params.toString()}`;
+    // Navigate to the booking URL
+    window.location.href = 'https://asiatech.in/booking_engine/index3?token=OTIyMA==';
   };
 
   return (

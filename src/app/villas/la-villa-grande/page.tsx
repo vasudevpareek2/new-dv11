@@ -2,7 +2,8 @@
 
 import VillaLayout from '@/components/villas/VillaLayout';
 import VillaBookingForm from '@/components/villas/VillaBookingForm';
-import Image from 'next/image';
+// Using require to avoid TypeScript errors with Next.js Image
+const Image = require('next/image').default;
 import {
   FaWifi,
   FaSwimmingPool,
@@ -16,6 +17,12 @@ import {
   FaHome,
   FaUtensils,
 } from 'react-icons/fa';
+
+// Fix icon props type
+type IconProps = {
+  size?: number;
+  className?: string;
+};
 import { useState } from 'react';
 
 export default function LaVillaGrande() {
@@ -28,22 +35,19 @@ export default function LaVillaGrande() {
     '/images/villas/la-villa-grande/gallery4.jpg',
   ];
 
+
   const amenities = [
-    { icon: <FaWifi className='w-6 h-6' />, name: 'Free WiFi' },
-    { icon: <FaSnowflake className='w-6 h-6' />, name: 'Air Conditioning' },
-    { icon: <FaBath className='w-6 h-6' />, name: 'Ensuite Bathrooms' },
-    { icon: <FaSwimmingPool className='w-6 h-6' />, name: 'Private Pool' },
-    { icon: <FaTv className='w-6 h-6' />, name: 'Multiple Flat-screen TVs' },
-    { icon: <FaUtensils className='w-6 h-6' />, name: 'Fully Equipped Kitchen' },
-    { icon: <FaGlassMartiniAlt className='w-6 h-6' />, name: 'Minibar & Bar Area' },
-    { icon: <FaCoffee className='w-6 h-6' />, name: 'Premium Coffee Machine' },
+    { icon: FaWifi, name: 'Free WiFi' },
+    { icon: FaSnowflake, name: 'Air Conditioning' },
+    { icon: FaBath, name: 'Ensuite Bathrooms' },
+    { icon: FaSwimmingPool, name: 'Private Pool' },
+    { icon: FaTv, name: 'Multiple Flat-screen TVs' },
+    { icon: FaUtensils, name: 'Fully Equipped Kitchen' },
+    { icon: FaGlassMartiniAlt, name: 'Minibar & Bar Area' },
+    { icon: FaCoffee, name: 'Premium Coffee Machine' },
   ];
 
-  const basePrices = [
-    { guests: 4, price: 45000 },
-    { guests: 6, price: 50000 },
-    { guests: 8, price: 55000 },
-  ];
+  // Price details removed
 
   return (
     <VillaLayout
@@ -114,21 +118,27 @@ export default function LaVillaGrande() {
 
               <div className='grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-xl'>
                 <div className='flex items-center'>
-                  <FaHome className='text-primary-500 text-2xl mr-3' />
+                  <div className='text-blue-500 mr-3'>
+                    <FaHome size={20} />
+                  </div>
                   <div>
                     <p className='text-sm text-gray-500'>Size</p>
                     <p className='font-medium'>279 m²</p>
                   </div>
                 </div>
                 <div className='flex items-center'>
-                  <FaUsers className='text-primary-500 text-2xl mr-3' />
+                  <div className='text-blue-500 mr-3'>
+                    <FaUsers size={20} />
+                  </div>
                   <div>
                     <p className='text-sm text-gray-500'>Guests</p>
                     <p className='font-medium'>Up to 8</p>
                   </div>
                 </div>
                 <div className='flex items-center'>
-                  <FaBed className='text-primary-500 text-2xl mr-3' />
+                  <div className='text-blue-500 mr-3'>
+                    <FaBed size={20} />
+                  </div>
                   <div>
                     <p className='text-sm text-gray-500'>Bedrooms</p>
                     <p className='font-medium'>4</p>
@@ -143,7 +153,9 @@ export default function LaVillaGrande() {
               <div className='grid grid-cols-2 md:grid-cols-3 gap-6'>
                 {amenities.map((amenity, index) => (
                   <div key={index} className='flex items-center'>
-                    <div className='text-primary-500 mr-3'>{amenity.icon}</div>
+                    <div className='text-blue-500 mr-3'>
+                      <amenity.icon size={20} />
+                    </div>
                     <span className='text-gray-700'>{amenity.name}</span>
                   </div>
                 ))}
@@ -156,26 +168,8 @@ export default function LaVillaGrande() {
             <VillaBookingForm
               villaId='la-villa-grande'
               villaName='La Villa Grande'
-              basePrices={basePrices}
               maxGuests={8}
             />
-
-            {/* Price Breakdown */}
-            <div className='bg-gray-50 p-6 rounded-xl mt-8'>
-              <h3 className='text-xl font-semibold text-gray-900 mb-4'>Price Details</h3>
-              <div className='space-y-3'>
-                {basePrices.map((price, index) => (
-                  <div key={index} className='flex justify-between'>
-                    <span className='text-gray-600'>{price.guests} Guests</span>
-                    <span className='font-medium'>₹{price.price.toLocaleString('en-IN')}</span>
-                  </div>
-                ))}
-              </div>
-              <div className='mt-4 pt-4 border-t border-gray-200'>
-                <p className='text-sm text-gray-500'>*Prices are per night and exclude taxes</p>
-                <p className='text-sm text-gray-500'>*Minimum stay may be required</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

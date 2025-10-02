@@ -7,7 +7,6 @@ const villas = [
     id: 'casa-mia',
     name: 'Villa CASA MIA',
     description: 'Spacious 3-bedroom villa with private pool, perfect for families or groups seeking comfort and luxury.',
-    price: 30000,
     size: '251 m²',
     capacity: 'Up to 6 Guests',
     image: '/images/villas/casa-mia/main.jpg',
@@ -17,7 +16,6 @@ const villas = [
     id: 'rosa',
     name: 'Villa Rosa',
     description: 'A romantic 2-bedroom villa with private pool and modern amenities, perfect for couples or small families.',
-    price: 20000,
     size: '251 m²',
     capacity: 'Up to 4 Guests',
     image: '/images/villas/rosa/main.jpg',
@@ -27,7 +25,6 @@ const villas = [
     id: 'la-villa-grande',
     name: 'La Villa Grande',
     description: 'Our most luxurious 4-bedroom villa with private pool, perfect for large families or groups.',
-    price: 45000,
     size: '279 m²',
     capacity: 'Up to 8 Guests',
     image: '/images/villas/la-villa-grande/main.jpg',
@@ -102,12 +99,7 @@ export default function VillasPage() {
                 
                 <div className="flex justify-between items-center mt-4">
                   <div>
-                    <span className="text-sm text-gray-500">From</span>
-                    <div className="text-xl font-bold text-primary-600">
-                      ₹{villa.price.toLocaleString()}
-                      <span className="text-sm font-normal text-gray-500">/night</span>
-                    </div>
-                    <p className="text-xs text-gray-500">+18% GST | Breakfast included</p>
+                    <p className="text-sm text-gray-500">Contact us for pricing</p>
                   </div>
                   <Link
                     href={`/villas/${villa.id}`}

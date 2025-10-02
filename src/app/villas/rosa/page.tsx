@@ -37,11 +37,7 @@ export default function VillaRosa() {
     { icon: <FaGlassMartiniAlt className='w-6 h-6' />, name: 'Minibar' },
   ];
 
-  const basePrices = [
-    { guests: 2, price: 20000 },
-    { guests: 3, price: 22500 },
-    { guests: 4, price: 25000 },
-  ];
+  // Price details removed
 
   return (
     <VillaLayout
@@ -154,26 +150,8 @@ export default function VillaRosa() {
             <VillaBookingForm
               villaId='rosa'
               villaName='Villa Rosa'
-              basePrices={basePrices}
               maxGuests={4}
             />
-
-            {/* Price Breakdown */}
-            <div className='bg-gray-50 p-6 rounded-xl mt-8'>
-              <h3 className='text-xl font-semibold text-gray-900 mb-4'>Price Details</h3>
-              <div className='space-y-3'>
-                {basePrices.map((price, index) => (
-                  <div key={index} className='flex justify-between'>
-                    <span className='text-gray-600'>{price.guests} Guests</span>
-                    <span className='font-medium'>₹{price.price.toLocaleString('en-IN')}</span>
-                  </div>
-                ))}
-              </div>
-              <div className='mt-4 pt-4 border-t border-gray-200'>
-                <p className='text-sm text-gray-500'>*Prices are per night and exclude taxes</p>
-                <p className='text-sm text-gray-500'>*Minimum stay may be required</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -4,8 +4,8 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Import the Room type and rooms data from the Rooms component
-import { rooms } from '../page';
+// Import the Room type and rooms data from the data file
+import { rooms } from '@/data/rooms';
 
 export default function RoomPage() {
   const { id } = useParams();

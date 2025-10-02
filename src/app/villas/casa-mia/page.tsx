@@ -2,7 +2,8 @@
 
 import VillaLayout from '@/components/villas/VillaLayout';
 import VillaBookingForm from '@/components/villas/VillaBookingForm';
-import Image from 'next/image';
+// Using require to avoid TypeScript errors with Next.js Image
+const Image = require('next/image').default;
 import {
   FaWifi,
   FaSwimmingPool,
@@ -15,6 +16,12 @@ import {
   FaUsers,
   FaHome,
 } from 'react-icons/fa';
+
+// Fix icon props type
+type IconProps = {
+  size?: number;
+  className?: string;
+};
 import { useState } from 'react';
 
 export default function VillaCasaMia() {
@@ -27,21 +34,24 @@ export default function VillaCasaMia() {
     '/images/villas/casa-mia/gallery4.jpg',
   ];
 
+  // Define icon components with consistent styling
+  const IconWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <div style={{ width: '24px', height: '24px', marginRight: '12px', color: '#3B82F6' }}>
+      {children as React.ReactElement}
+    </div>
+  );
+
   const amenities = [
-    { icon: <FaWifi className='w-6 h-6' />, name: 'Free WiFi' },
-    { icon: <FaSnowflake className='w-6 h-6' />, name: 'Air Conditioning' },
-    { icon: <FaBath className='w-6 h-6' />, name: 'Ensuite Bathroom' },
-    { icon: <FaSwimmingPool className='w-6 h-6' />, name: 'Private Pool' },
-    { icon: <FaTv className='w-6 h-6' />, name: 'Flat-screen TV' },
-    { icon: <FaCoffee className='w-6 h-6' />, name: 'Coffee Machine' },
-    { icon: <FaGlassMartiniAlt className='w-6 h-6' />, name: 'Minibar' },
+    { icon: <FaWifi size={20} />, name: 'Free WiFi' },
+    { icon: <FaSnowflake size={20} />, name: 'Air Conditioning' },
+    { icon: <FaBath size={20} />, name: 'Ensuite Bathroom' },
+    { icon: <FaSwimmingPool size={20} />, name: 'Private Pool' },
+    { icon: <FaTv size={20} />, name: 'Flat-screen TV' },
+    { icon: <FaCoffee size={20} />, name: 'Coffee Machine' },
+    { icon: <FaGlassMartiniAlt size={20} />, name: 'Minibar' },
   ];
 
-  const basePrices = [
-    { guests: 4, price: 30000 },
-    { guests: 5, price: 32500 },
-    { guests: 6, price: 35000 },
-  ];
+  // Price details removed
 
   return (
     <VillaLayout
@@ -52,11 +62,12 @@ export default function VillaCasaMia() {
       {/* Hero Section */}
       <div className='relative h-[60vh] w-full'>
         <Image
-          src={galleryImages[selectedImage] || '/images/villas/casa-mia/main.jpg'}
+          src='/images/villas/casa-mia/main.jpg'
           alt='Villa Casa Mia'
           fill
-          className='object-cover'
+          className='object-cover rounded-lg'
           priority
+          sizes='100vw'
         />
         <div className='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center'>
           <div className='text-center text-white px-4'>
@@ -106,27 +117,25 @@ export default function VillaCasaMia() {
               <h2 className='text-3xl font-bold text-gray-900 mb-4'>Villa Overview</h2>
               <p className='text-gray-600 mb-6 leading-relaxed'>
                 Experience the epitome of luxury in our spacious 3-bedroom Villa Casa Mia. Perfect
-                for families or groups, this villa offers a private pool, modern amenities, and
-                breathtaking views of the surrounding landscape.
               </p>
 
               <div className='grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-xl'>
                 <div className='flex items-center'>
-                  <FaHome className='text-primary-500 text-2xl mr-3' />
+                    <div className="text-blue-500 mr-3"><FaHome size={20} /></div>
                   <div>
                     <p className='text-sm text-gray-500'>Size</p>
                     <p className='font-medium'>251 m²</p>
                   </div>
                 </div>
                 <div className='flex items-center'>
-                  <FaUsers className='text-primary-500 text-2xl mr-3' />
+                    <div className="text-blue-500 mr-3"><FaUsers size={20} /></div>
                   <div>
                     <p className='text-sm text-gray-500'>Guests</p>
                     <p className='font-medium'>Up to 6</p>
                   </div>
                 </div>
                 <div className='flex items-center'>
-                  <FaBed className='text-primary-500 text-2xl mr-3' />
+                    <div className="text-blue-500 mr-3"><FaBed size={20} /></div>
                   <div>
                     <p className='text-sm text-gray-500'>Bedrooms</p>
                     <p className='font-medium'>3</p>
@@ -141,7 +150,7 @@ export default function VillaCasaMia() {
               <div className='grid grid-cols-2 md:grid-cols-3 gap-6'>
                 {amenities.map((amenity, index) => (
                   <div key={index} className='flex items-center'>
-                    <div className='text-primary-500 mr-3'>{amenity.icon}</div>
+                    <IconWrapper>{amenity.icon}</IconWrapper>
                     <span className='text-gray-700'>{amenity.name}</span>
                   </div>
                 ))}
@@ -154,26 +163,8 @@ export default function VillaCasaMia() {
             <VillaBookingForm
               villaId='casa-mia'
               villaName='Villa Casa Mia'
-              basePrices={basePrices}
               maxGuests={6}
             />
-
-            {/* Price Breakdown */}
-            <div className='bg-gray-50 p-6 rounded-xl mt-8'>
-              <h3 className='text-xl font-semibold text-gray-900 mb-4'>Price Details</h3>
-              <div className='space-y-3'>
-                {basePrices.map((price, index) => (
-                  <div key={index} className='flex justify-between'>
-                    <span className='text-gray-600'>{price.guests} Guests</span>
-                    <span className='font-medium'>₹{price.price.toLocaleString('en-IN')}</span>
-                  </div>
-                ))}
-              </div>
-              <div className='mt-4 pt-4 border-t border-gray-200'>
-                <p className='text-sm text-gray-500'>*Prices are per night and exclude taxes</p>
-                <p className='text-sm text-gray-500'>*Minimum stay may be required</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
