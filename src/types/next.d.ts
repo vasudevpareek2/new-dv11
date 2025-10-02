@@ -9,7 +9,7 @@ declare module 'next' {
 
 declare module 'next/image' {
   import { ComponentProps } from 'react';
-  
+
   interface StaticImageData {
     src: string;
     height: number;
@@ -17,7 +17,8 @@ declare module 'next/image' {
     blurDataURL?: string;
   }
 
-  interface ImageProps extends Omit<ComponentProps<'img'>, 'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'> {
+  interface ImageProps
+    extends Omit<ComponentProps<'img'>, 'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'> {
     src: string | StaticImageData;
     width?: number | `${number}`;
     height?: number | `${number}`;

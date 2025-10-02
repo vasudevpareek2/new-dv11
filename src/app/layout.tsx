@@ -71,13 +71,9 @@ export const viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${philosopher.variable} font-sans`}>
+    <html className={`${philosopher.variable} font-sans`} lang='en'>
       <body className={inter.className}>
         <FloatingIcons />
         {children}

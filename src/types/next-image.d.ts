@@ -8,7 +8,10 @@ declare module 'next/image' {
     blurDataURL?: string;
   }
 
-  type ImageProps = Omit<ComponentProps<'img'>, 'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'> & {
+  type ImageProps = Omit<
+    ComponentProps<'img'>,
+    'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'
+  > & {
     src: string | StaticImageData;
     width?: number | `${number}`;
     height?: number | `${number}`;

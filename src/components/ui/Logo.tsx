@@ -12,17 +12,17 @@ export default function Logo() {
 
   // Don't render the image during SSR to avoid hydration mismatch
   if (!mounted) {
-    return <div className="h-16 w-[200px] bg-transparent" aria-hidden="true" />;
+    return <div aria-hidden='true' className='h-16 w-[200px] bg-transparent' />;
   }
 
   return (
-    <img 
-      src={"/images/logo.png"}
-      alt="Dolce Vita Pushkar" 
-      width={200}
+    <img
+      alt='Dolce Vita Pushkar'
+      className='h-16 w-auto object-contain'
       height={80}
-      className="h-16 w-auto object-contain"
-      loading="eager"
+      loading='eager'
+      src={'/images/logo.png'}
+      width={200}
     />
   );
 }

@@ -9,7 +9,7 @@ declare global {
     interface IntrinsicElements {
       [elemName: string]: any;
     }
-    
+
     // This ensures that React elements are valid JSX elements
     interface Element extends React.ReactElement<any, any> {}
     interface ElementClass extends React.Component<any> {
@@ -27,4 +27,5 @@ declare global {
 }
 
 // This makes the file a module
-{}
+{
+}

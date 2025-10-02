@@ -21,14 +21,14 @@ export const sendWhatsAppMessage = async ({
   try {
     // Remove any non-numeric characters from the phone number
     const phoneNumber = to.replace(/\D/g, '');
-    
+
     // If it's a 10-digit Indian number, add the country code (91)
     const formattedNumber = phoneNumber.length === 10 ? `91${phoneNumber}` : phoneNumber;
 
     // Format the message with booking details if provided
     let formattedMessage = message;
     if (bookingDetails) {
-      formattedMessage += `\n\nBooking Details:`;
+      formattedMessage += '\n\nBooking Details:';
       if (bookingDetails.bookingId) formattedMessage += `\nBooking ID: ${bookingDetails.bookingId}`;
       if (bookingDetails.villaName) formattedMessage += `\nVilla: ${bookingDetails.villaName}`;
       if (bookingDetails.checkInDate && bookingDetails.checkOutDate) {
@@ -73,11 +73,11 @@ export const sendWhatsAppMessage = async ({
 // Template messages
 export const WhatsAppTemplates = {
   paymentSuccess: (_bookingId: string) =>
-    `✅ Booking Confirmed!\n\nThank you for your booking. Your payment was successful.`,
-  
+    '✅ Booking Confirmed!\n\nThank you for your booking. Your payment was successful.',
+
   paymentFailed: (_bookingId: string) =>
-    `❌ Payment Failed\n\nWe couldn't process your payment. Please try again or contact support.`,
-  
+    "❌ Payment Failed\n\nWe couldn't process your payment. Please try again or contact support.",
+
   bookingDetails: (villaName: string, checkIn: string, checkOut: string, amount: number) =>
     `🏡 ${villaName}\n📅 ${checkIn} to ${checkOut}\n💵 Amount: ₹${amount.toLocaleString('en-IN')}`,
 };

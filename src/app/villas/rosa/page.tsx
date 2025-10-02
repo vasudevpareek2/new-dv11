@@ -1,7 +1,5 @@
 'use client';
 
-import VillaLayout from '@/components/villas/VillaLayout';
-import VillaBookingForm from '@/components/villas/VillaBookingForm';
 import Image from 'next/image';
 import {
   FaWifi,
@@ -16,6 +14,8 @@ import {
   FaHome,
 } from 'react-icons/fa';
 import { useState } from 'react';
+import VillaBookingForm from '@/components/villas/VillaBookingForm';
+import VillaLayout from '@/components/villas/VillaLayout';
 
 export default function VillaRosa() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -41,18 +41,18 @@ export default function VillaRosa() {
 
   return (
     <VillaLayout
-      title='Villa Rosa | Dolce Vita Pushkar'
       description='Elegant 2-bedroom villa with private pool and modern amenities at Dolce Vita Pushkar.'
       image='/images/villas/rosa/main.jpg'
+      title='Villa Rosa | Dolce Vita Pushkar'
     >
       {/* Hero Section */}
       <div className='relative h-[60vh] w-full'>
         <Image
-          src={galleryImages[selectedImage] || '/images/villas/rosa/main.jpg'}
-          alt='Villa Rosa'
           fill
-          className='object-cover'
           priority
+          alt='Villa Rosa'
+          className='object-cover'
+          src={galleryImages[selectedImage] || '/images/villas/rosa/main.jpg'}
         />
         <div className='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center'>
           <div className='text-center text-white px-4'>
@@ -75,12 +75,19 @@ export default function VillaRosa() {
                     key={index}
                     className={`relative h-24 cursor-pointer transition-opacity ${selectedImage === index ? 'ring-2 ring-primary-500' : 'opacity-75 hover:opacity-100'}`}
                     onClick={() => setSelectedImage(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setSelectedImage(index);
+                      }
+                    }}
+                    role='button'
+                    tabIndex={0}
                   >
                     <Image
-                      src={img}
-                      alt={`Villa Rosa - ${index + 1}`}
                       fill
+                      alt={`Villa Rosa - ${index + 1}`}
                       className='object-cover rounded'
+                      src={img}
                     />
                   </div>
                 ))}
@@ -89,10 +96,10 @@ export default function VillaRosa() {
               {/* Main Image */}
               <div className='relative h-96 w-full rounded-xl overflow-hidden'>
                 <Image
-                  src={galleryImages[selectedImage] || '/images/villas/rosa/main.jpg'}
-                  alt='Villa Rosa'
                   fill
+                  alt='Villa Rosa'
                   className='object-cover'
+                  src={galleryImages[selectedImage] || '/images/villas/rosa/main.jpg'}
                 />
               </div>
             </div>
@@ -147,11 +154,7 @@ export default function VillaRosa() {
 
           {/* Right Column - Booking Form */}
           <div className='lg:pl-8'>
-            <VillaBookingForm
-              villaId='rosa'
-              villaName='Villa Rosa'
-              maxGuests={4}
-            />
+            <VillaBookingForm maxGuests={4} villaId='rosa' villaName='Villa Rosa' />
           </div>
         </div>
       </div>

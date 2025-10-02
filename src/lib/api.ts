@@ -27,7 +27,7 @@ export async function apiRequest<T = any>(
     method,
     headers: {
       ...(!isFormData && { 'Content-Type': 'application/json' }),
-      'Accept': 'application/json',
+      Accept: 'application/json',
       ...headers,
     },
     credentials: 'include', // Include cookies for authentication
@@ -51,12 +51,12 @@ export async function apiRequest<T = any>(
       headers: config.headers,
       body: config.body,
       mode: config.mode,
-      credentials: config.credentials
+      credentials: config.credentials,
     });
-    
+
     // Use the full URL for the fetch request
     const response = await fetch(apiUrl, config);
-    
+
     console.log('Response status:', response.status);
     console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 

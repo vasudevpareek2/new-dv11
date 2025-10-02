@@ -10,23 +10,20 @@ type VillaLayoutProps = {
 };
 
 export default function VillaLayout({ children, title, description, image }: VillaLayoutProps) {
-
   return (
     <>
       <Head>
         <title>{title} | Dolce Vita Pushkar</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={`${title} | Dolce Vita Pushkar`} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={image} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta content={description} name='description' />
+        <meta content={`${title} | Dolce Vita Pushkar`} property='og:title' />
+        <meta content={description} property='og:description' />
+        <meta content={image} property='og:image' />
+        <meta content='width=device-width, initial-scale=1' name='viewport' />
       </Head>
-      
-      <div className="min-h-screen flex flex-col">
+
+      <div className='min-h-screen flex flex-col'>
         <Header />
-        <main className="flex-grow">
-          {children}
-        </main>
+        <main className='flex-grow'>{children}</main>
         <Footer />
       </div>
     </>

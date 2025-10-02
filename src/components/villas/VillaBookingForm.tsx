@@ -49,22 +49,21 @@ export default function VillaBookingForm({
   const router = useRouter();
   const today = new Date();
   const tomorrow = addDays(today, 1);
-  
+
   const [dates, setDates] = useState<BookingDates>({
     checkIn: today,
     checkOut: tomorrow,
   });
-  
+
   const [guests, setGuests] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDateChange = (field: keyof BookingDates, value: Date | null) => {
-    setDates(prev => ({
+    setDates((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
-
 
   const handleCheckAvailability = (e: ReactMouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -72,12 +71,12 @@ export default function VillaBookingForm({
       alert('Please select both check-in and check-out dates');
       return;
     }
-    
+
     // Format dates as YYYY-MM-DD
     const formatDate = (date: Date) => format(date, 'yyyy-MM-dd');
     const checkIn = formatDate(dates.checkIn);
     const checkOut = formatDate(dates.checkOut);
-    
+
     // Navigate to the booking URL with parameters
     window.location.href = `https://asiatech.in/booking_engine/index3?token=OTIyMA==&check_in=${checkIn}&check_out=${checkOut}&adults=${guests}`;
   };
@@ -89,44 +88,52 @@ export default function VillaBookingForm({
       <form className='space-y-6'>
         {/* Check-in Date */}
         <div>
-          <label htmlFor='checkIn' className='block text-sm font-medium text-gray-700 mb-1'>
+          <label className='block text-sm font-medium text-gray-700 mb-1' htmlFor='checkIn'>
             Check-in Date
           </label>
           <input
-            type='date'
-            id='checkIn'
             required
             className='w-full px-4 py-2 border border-gray-300 rounded-lg'
-            value={dates.checkIn ? format(dates.checkIn, 'yyyy-MM-dd') : ''}
+            id='checkIn'
             min={format(today, 'yyyy-MM-dd')}
-            onChange={(e) => handleDateChange('checkIn', e.target.value ? new Date(e.target.value) : null)}
+            type='date'
+            value={dates.checkIn ? format(dates.checkIn, 'yyyy-MM-dd') : ''}
+            onChange={(e) =>
+              handleDateChange('checkIn', e.target.value ? new Date(e.target.value) : null)
+            }
           />
         </div>
 
         {/* Check-out Date */}
         <div>
-          <label htmlFor='checkOut' className='block text-sm font-medium text-gray-700 mb-1'>
+          <label className='block text-sm font-medium text-gray-700 mb-1' htmlFor='checkOut'>
             Check-out Date
           </label>
           <input
-            type='date'
-            id='checkOut'
             required
             className='w-full px-4 py-2 border border-gray-300 rounded-lg'
+            id='checkOut'
+            min={
+              dates.checkIn
+                ? format(addDays(dates.checkIn, 1), 'yyyy-MM-dd')
+                : format(tomorrow, 'yyyy-MM-dd')
+            }
+            type='date'
             value={dates.checkOut ? format(dates.checkOut, 'yyyy-MM-dd') : ''}
-            min={dates.checkIn ? format(addDays(dates.checkIn, 1), 'yyyy-MM-dd') : format(tomorrow, 'yyyy-MM-dd')}
-            onChange={(e) => handleDateChange('checkOut', e.target.value ? new Date(e.target.value) : null)}
+            onChange={(e) =>
+              handleDateChange('checkOut', e.target.value ? new Date(e.target.value) : null)
+            }
           />
         </div>
 
         {/* Guests */}
         <div>
-          <label htmlFor='guests' className='block text-sm font-medium text-gray-700 mb-1'>
+          <label className='block text-sm font-medium text-gray-700 mb-1' htmlFor='guests'>
             Number of Guests
           </label>
           <select
-            id='guests'
             className='w-full px-4 py-2 border border-gray-300 rounded-lg'
+            id='guests'
             value={guests}
             onChange={(e) => setGuests(Number(e.target.value))}
           >
@@ -140,11 +147,11 @@ export default function VillaBookingForm({
 
         {/* Check Availability Button */}
         <button
-          onClick={handleCheckAvailability}
-          disabled={isLoading}
           className={`w-full py-3 px-4 rounded-lg text-white font-medium ${
             isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
           }`}
+          disabled={isLoading}
+          onClick={handleCheckAvailability}
         >
           {isLoading ? 'Checking...' : 'Check Rates & Availability'}
         </button>

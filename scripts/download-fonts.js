@@ -19,7 +19,7 @@ const fonts = [
 
 async function downloadFonts() {
   const fontsDir = path.join(__dirname, '../public/fonts');
-  
+
   // Create fonts directory if it doesn't exist
   if (!fs.existsSync(fontsDir)) {
     fs.mkdirSync(fontsDir, { recursive: true });
@@ -29,22 +29,19 @@ async function downloadFonts() {
   for (const font of fonts) {
     const filePath = path.join(fontsDir, font.name);
     console.log(`Downloading ${font.name}...`);
-    
+
     try {
       const response = await new Promise((resolve, reject) => {
         const req = https.get(font.url, resolve);
         req.on('error', reject);
       });
-      
+
       if (response.statusCode !== 200) {
         throw new Error(`Failed to download ${font.name}: ${response.statusCode}`);
       }
-      
-      await pipeline(
-        response,
-        fs.createWriteStream(filePath)
-      );
-      
+
+      await pipeline(response, fs.createWriteStream(filePath));
+
       console.log(`Successfully downloaded ${font.name}`);
     } catch (error) {
       console.error(`Error downloading ${font.name}:`, error);

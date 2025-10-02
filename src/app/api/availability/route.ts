@@ -5,10 +5,7 @@ export async function POST(request: Request) {
     const { villaId, checkIn, checkOut } = await request.json();
 
     if (!villaId || !checkIn || !checkOut) {
-      return NextResponse.json(
-        { error: 'Missing required parameters' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
     }
 
     // Stub implementation - always returns as available
@@ -18,16 +15,10 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Error in availability check:', error);
-    return NextResponse.json(
-      { error: 'Failed to check availability' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to check availability' }, { status: 500 });
   }
 }
 
 export function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  );
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }

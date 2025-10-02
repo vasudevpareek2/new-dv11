@@ -5,10 +5,7 @@ export async function POST(request: Request) {
     const { villaId } = await request.json();
 
     if (!villaId) {
-      return NextResponse.json(
-        { error: 'Villa ID is required' },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Villa ID is required' }, { status: 400 });
     }
 
     // Stub implementation - return empty array of blocked dates
@@ -18,13 +15,13 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Error in blocked dates endpoint:', error);
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch blocked dates',
-        details: process.env.NODE_ENV === 'development' 
-          ? error instanceof Error ? error.message : 'Unknown error'
-          : undefined
+        details: process.env.NODE_ENV === 'development' ?
+          (error instanceof Error ? error.message : 'Unknown error') :
+          undefined,
       },
       { status: 500 }
     );
@@ -32,8 +29,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json(
-    { error: 'Method not allowed' },
-    { status: 405 }
-  );
+  return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
 }

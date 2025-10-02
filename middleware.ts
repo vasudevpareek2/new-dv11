@@ -8,15 +8,17 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const hostname = request.headers.get('host');
   const protocol = request.headers.get('x-forwarded-proto') || 'http';
-  
+
   // Skip middleware for public paths
-  if (publicPaths.some(path => pathname.startsWith(path))) {
+  if (publicPaths.some((path) => pathname.startsWith(path))) {
     return NextResponse.next();
   }
 
   // Redirect to HTTPS in production
   if (process.env.NODE_ENV === 'production' && protocol !== 'https') {
-    const httpsUrl = new URL(`https://${hostname}${request.nextUrl.pathname}${request.nextUrl.search}`);
+    const httpsUrl = new URL(
+      `https://${hostname}${request.nextUrl.pathname}${request.nextUrl.search}`
+    );
     return NextResponse.redirect(httpsUrl);
   }
 
@@ -37,7 +39,9 @@ export function middleware(request: NextRequest) {
     frame-ancestors 'none';
     block-all-mixed-content;
     upgrade-insecure-requests;
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, ' ')
+    .trim();
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
@@ -46,7 +50,10 @@ export function middleware(request: NextRequest) {
   requestHeaders.set('X-Frame-Options', 'DENY');
   requestHeaders.set('X-XSS-Protection', '1; mode=block');
   requestHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  requestHeaders.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
+  requestHeaders.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+  );
   requestHeaders.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   const response = NextResponse.next({
@@ -61,7 +68,10 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), interest-cohort=()'
+  );
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   return response;
@@ -69,7 +79,5 @@ export function middleware(request: NextRequest) {
 
 // Only run middleware on these paths
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };

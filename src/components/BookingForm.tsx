@@ -45,24 +45,28 @@ export default function BookingForm() {
       <div className='flex items-center bg-primary-50 px-4 py-2'>
         <div className='flex items-center'>
           <svg className='w-5 h-5 text-primary-600 mr-2' fill='currentColor' viewBox='0 0 20 20'>
-            <path fillRule='evenodd' d='M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
+            <path
+              clipRule='evenodd'
+              d='M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
+              fillRule='evenodd'
+            />
           </svg>
           <span className='text-sm font-medium text-gray-800'>Best Rate Guarantee</span>
         </div>
       </div>
-      <form onSubmit={handleSubmit} className='p-4'>
+      <form className='p-4' onSubmit={handleSubmit}>
         <div className='flex flex-wrap items-end gap-2'>
           {/* Villa Selection */}
           <div className='flex-1 min-w-[180px]'>
-            <label htmlFor='villa' className='block text-xs font-medium text-gray-700 mb-1'>
+            <label className='block text-xs font-medium text-gray-700 mb-1' htmlFor='villa'>
               Select Villa <span className='text-red-500'>*</span>
             </label>
             <select
+              required
+              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
               id='villa'
               value={villaId}
               onChange={(e) => setVillaId(e.target.value)}
-              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
-              required
             >
               <option value=''>-- Select Villa --</option>
               {villas.map((villa) => (
@@ -75,46 +79,46 @@ export default function BookingForm() {
 
           {/* Check-in Date */}
           <div className='flex-1 min-w-[150px]'>
-            <label htmlFor='check-in' className='block text-xs font-medium text-gray-700 mb-1'>
+            <label className='block text-xs font-medium text-gray-700 mb-1' htmlFor='check-in'>
               Check-in
             </label>
             <input
-              type='date'
+              required
+              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
               id='check-in'
+              min={today}
+              type='date'
               value={checkIn || today}
               onChange={(e) => setCheckIn(e.target.value)}
-              min={today}
-              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
-              required
             />
           </div>
 
           {/* Check-out Date */}
           <div className='flex-1 min-w-[150px]'>
-            <label htmlFor='check-out' className='block text-xs font-medium text-gray-700 mb-1'>
+            <label className='block text-xs font-medium text-gray-700 mb-1' htmlFor='check-out'>
               Check-out
             </label>
             <input
-              type='date'
+              required
+              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
               id='check-out'
+              min={checkIn || tomorrow}
+              type='date'
               value={checkOut || tomorrow}
               onChange={(e) => setCheckOut(e.target.value)}
-              min={checkIn || tomorrow}
-              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
-              required
             />
           </div>
 
           {/* Adults */}
           <div className='flex-1 min-w-[100px]'>
-            <label htmlFor='adults' className='block text-xs font-medium text-gray-700 mb-1'>
+            <label className='block text-xs font-medium text-gray-700 mb-1' htmlFor='adults'>
               Adults
             </label>
             <select
+              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
               id='adults'
               value={adults}
               onChange={(e) => setAdults(Number(e.target.value))}
-              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
             >
               {[1, 2, 3, 4, 5, 6].map((num) => (
                 <option key={num} value={num}>
@@ -126,14 +130,14 @@ export default function BookingForm() {
 
           {/* Children */}
           <div className='flex-1 min-w-[100px]'>
-            <label htmlFor='children' className='block text-xs font-medium text-gray-700 mb-1'>
+            <label className='block text-xs font-medium text-gray-700 mb-1' htmlFor='children'>
               Children
             </label>
             <select
+              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
               id='children'
               value={children}
               onChange={(e) => setChildren(Number(e.target.value))}
-              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 h-10'
             >
               {[0, 1, 2, 3, 4].map((num) => (
                 <option key={num} value={num}>
@@ -145,24 +149,24 @@ export default function BookingForm() {
 
           {/* Promo Code */}
           <div className='flex-1 min-w-[150px]'>
-            <label htmlFor='promo-code' className='block text-xs font-medium text-gray-700 mb-1'>
+            <label className='block text-xs font-medium text-gray-700 mb-1' htmlFor='promo-code'>
               Promo Code
             </label>
             <input
-              type='text'
+              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 placeholder-gray-400 h-10'
               id='promo-code'
+              placeholder='Enter code'
+              type='text'
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
-              placeholder='Enter code'
-              className='w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 placeholder-gray-400 h-10'
             />
           </div>
 
           {/* Submit Button */}
           <div className='flex-1 min-w-[150px]'>
             <button
-              type='submit'
               className='w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 px-4 rounded-md h-10 text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 flex items-center justify-center'
+              type='submit'
             >
               Check Availability
             </button>

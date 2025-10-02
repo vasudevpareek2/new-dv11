@@ -14,7 +14,8 @@ export const rooms: Room[] = [
   {
     id: 1,
     name: 'Deluxe Room',
-    description: 'Experience luxury in our spacious deluxe rooms with modern amenities and a comfortable king-size bed.',
+    description:
+      'Experience luxury in our spacious deluxe rooms with modern amenities and a comfortable king-size bed.',
     price: 8999,
     size: '450 sq.ft',
     capacity: '2 Adults',
@@ -34,7 +35,8 @@ export const rooms: Room[] = [
   {
     id: 2,
     name: 'Luxury Suite',
-    description: 'Indulge in our luxurious suite featuring a separate living area and premium amenities.',
+    description:
+      'Indulge in our luxurious suite featuring a separate living area and premium amenities.',
     price: 12999,
     size: '750 sq.ft',
     capacity: '2 Adults + 1 Child',
@@ -55,7 +57,8 @@ export const rooms: Room[] = [
   {
     id: 3,
     name: 'Villa Grande',
-    description: 'Our premium villa offering ultimate privacy, luxury, and stunning views of the surrounding landscape.',
+    description:
+      'Our premium villa offering ultimate privacy, luxury, and stunning views of the surrounding landscape.',
     price: 19999,
     size: '1200 sq.ft',
     capacity: '4 Adults + 2 Children',

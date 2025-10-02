@@ -8,7 +8,8 @@ declare module 'next/image' {
     blurDataURL?: string;
   }
 
-  interface ImageProps extends Omit<ComponentProps<'img'>, 'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'> {
+  interface ImageProps
+    extends Omit<ComponentProps<'img'>, 'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'> {
     src: string | StaticImageData;
     width?: number | `${number}`;
     height?: number | `${number}`;
@@ -35,13 +36,13 @@ declare module 'next/image' {
 
 declare module 'next/link' {
   import { LinkProps as NextLinkProps } from 'next/dist/client/link';
-  
+
   export interface LinkProps extends Omit<NextLinkProps, 'as' | 'passHref' | 'children'> {
     children: ReactNode;
     as?: string;
     passHref?: boolean;
   }
-  
+
   const Link: (props: LinkProps) => JSX.Element;
   export default Link;
 }

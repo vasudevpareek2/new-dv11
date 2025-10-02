@@ -19,19 +19,19 @@ export function getApiBaseUrl(): string {
 export function getApiUrl(endpoint: string): string {
   const baseUrl = getApiBaseUrl();
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  
+
   // Remove any trailing slashes from base URL
   const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-  
+
   // If the endpoint already starts with /api, don't add another one
   if (normalizedEndpoint.startsWith('/api')) {
     return `${cleanBaseUrl}${normalizedEndpoint}`;
   }
-  
+
   // Otherwise, ensure there's exactly one /api in the path
   if (cleanBaseUrl.endsWith('/api')) {
     return `${cleanBaseUrl}${normalizedEndpoint}`;
   }
-  
+
   return `${cleanBaseUrl}/api${normalizedEndpoint}`;
 }

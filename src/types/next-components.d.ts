@@ -9,7 +9,11 @@ declare module 'next/image' {
     blurDataURL?: string;
   }
 
-  export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'> {
+  export interface ImageProps
+    extends Omit<
+      React.ImgHTMLAttributes<HTMLImageElement>,
+      'src' | 'srcSet' | 'ref' | 'width' | 'height' | 'loading'
+    > {
     src: string | StaticImageData;
     width?: number | `${number}`;
     height?: number | `${number}`;

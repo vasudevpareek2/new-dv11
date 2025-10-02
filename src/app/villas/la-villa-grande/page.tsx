@@ -1,9 +1,7 @@
 'use client';
 
-import VillaLayout from '@/components/villas/VillaLayout';
-import VillaBookingForm from '@/components/villas/VillaBookingForm';
-// Using require to avoid TypeScript errors with Next.js Image
-const Image = require('next/image').default;
+import { useState } from 'react';
+import Image from 'next/image';
 import {
   FaWifi,
   FaSwimmingPool,
@@ -17,13 +15,8 @@ import {
   FaHome,
   FaUtensils,
 } from 'react-icons/fa';
-
-// Fix icon props type
-type IconProps = {
-  size?: number;
-  className?: string;
-};
-import { useState } from 'react';
+import VillaLayout from '@/components/villas/VillaLayout';
+import VillaBookingForm from '@/components/villas/VillaBookingForm';
 
 export default function LaVillaGrande() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -34,7 +27,6 @@ export default function LaVillaGrande() {
     '/images/villas/la-villa-grande/gallery3.jpg',
     '/images/villas/la-villa-grande/gallery4.jpg',
   ];
-
 
   const amenities = [
     { icon: FaWifi, name: 'Free WiFi' },
@@ -51,18 +43,18 @@ export default function LaVillaGrande() {
 
   return (
     <VillaLayout
-      title='La Villa Grande | Dolce Vita Pushkar'
       description='Luxurious 4-bedroom villa with private pool and premium amenities at Dolce Vita Pushkar.'
       image='/images/villas/la-villa-grande/main.jpg'
+      title='La Villa Grande | Dolce Vita Pushkar'
     >
       {/* Hero Section */}
       <div className='relative h-[60vh] w-full'>
         <Image
-          src={galleryImages[selectedImage] || '/images/villas/la-villa-grande/main.jpg'}
-          alt='La Villa Grande'
           fill
-          className='object-cover'
           priority
+          alt='La Villa Grande'
+          className='object-cover'
+          src={galleryImages[selectedImage] || '/images/villas/la-villa-grande/main.jpg'}
         />
         <div className='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center'>
           <div className='text-center text-white px-4'>
@@ -85,12 +77,19 @@ export default function LaVillaGrande() {
                     key={index}
                     className={`relative h-24 cursor-pointer transition-opacity ${selectedImage === index ? 'ring-2 ring-primary-500' : 'opacity-75 hover:opacity-100'}`}
                     onClick={() => setSelectedImage(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setSelectedImage(index);
+                      }
+                    }}
+                    role='button'
+                    tabIndex={0}
                   >
                     <Image
-                      src={img}
-                      alt={`La Villa Grande - ${index + 1}`}
                       fill
+                      alt={`La Villa Grande - ${index + 1}`}
                       className='object-cover rounded'
+                      src={img}
                     />
                   </div>
                 ))}
@@ -99,10 +98,10 @@ export default function LaVillaGrande() {
               {/* Main Image */}
               <div className='relative h-96 w-full rounded-xl overflow-hidden'>
                 <Image
-                  src={galleryImages[selectedImage] || '/images/villas/la-villa-grande/main.jpg'}
-                  alt='La Villa Grande'
                   fill
+                  alt='La Villa Grande'
                   className='object-cover'
+                  src={galleryImages[selectedImage] || '/images/villas/la-villa-grande/main.jpg'}
                 />
               </div>
             </div>
@@ -165,11 +164,7 @@ export default function LaVillaGrande() {
 
           {/* Right Column - Booking Form */}
           <div className='lg:pl-8'>
-            <VillaBookingForm
-              villaId='la-villa-grande'
-              villaName='La Villa Grande'
-              maxGuests={8}
-            />
+            <VillaBookingForm maxGuests={8} villaId='la-villa-grande' villaName='La Villa Grande' />
           </div>
         </div>
       </div>

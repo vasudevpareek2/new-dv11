@@ -32,11 +32,7 @@ export const slugify = (str: string): string => {
  * @param ellipsis - Whether to add ellipsis at the end (default: true)
  * @returns Truncated text
  */
-export const truncateText = (
-  text: string,
-  maxLength: number,
-  ellipsis: boolean = true
-): string => {
+export const truncateText = (text: string, maxLength: number, ellipsis: boolean = true): string => {
   if (text.length <= maxLength) return text;
   return ellipsis ? `${text.substring(0, maxLength)}...` : text.substring(0, maxLength);
 };
@@ -190,7 +186,7 @@ export const formatDuration = (minutes: number): string => {
  */
 export const getCurrentBreakpoint = (): string => {
   if (typeof window === 'undefined') return 'sm';
-  
+
   const width = window.innerWidth;
   if (width >= 1280) return 'xl';
   if (width >= 1024) return 'lg';
@@ -274,13 +270,13 @@ export const toTitleCase = (str: string): string => {
  */
 export const createQueryString = (params: Record<string, any>): string => {
   const searchParams = new URLSearchParams();
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       searchParams.append(key, String(value));
     }
   });
-  
+
   return searchParams.toString();
 };
 
@@ -292,10 +288,10 @@ export const createQueryString = (params: Record<string, any>): string => {
 export const parseQueryString = <T extends Record<string, any>>(queryString: string): T => {
   const params = new URLSearchParams(queryString);
   const result: Record<string, string> = {};
-  
+
   for (const [key, value] of params.entries()) {
     result[key] = value;
   }
-  
+
   return result as T;
 };

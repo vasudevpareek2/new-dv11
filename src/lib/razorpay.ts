@@ -104,8 +104,10 @@ export function loadRazorpay(): Promise<RazorpayStatic> {
  * Type guard to check if an object is a Razorpay instance
  */
 export function isRazorpayInstance(obj: any): obj is RazorpayInstance {
-  return obj && 
-         typeof obj.open === 'function' && 
-         typeof obj.on === 'function' &&
-         typeof obj.close === 'function';
+  return (
+    obj &&
+    typeof obj.open === 'function' &&
+    typeof obj.on === 'function' &&
+    typeof obj.close === 'function'
+  );
 }

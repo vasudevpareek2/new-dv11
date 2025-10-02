@@ -4,10 +4,5 @@
     "types": ["cypress", "node"],
     "noEmit": true
   },
-  "include": [
-    "cypress/**/*.ts",
-    "cypress/**/*.tsx",
-    "**/*.cy.ts",
-    "**/*.cy.tsx"
-  ]
+  "include": ["cypress/**/*.ts", "cypress/**/*.tsx", "**/*.cy.ts", "**/*.cy.tsx"]
 }

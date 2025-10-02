@@ -28,39 +28,44 @@ A modern, responsive website for Dolce Vita Pushkar, a luxury villa resort in Pu
 ## 🛠 Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/your-username/dolce-vita-pushkar.git
    cd dolce-vita-pushkar
    ```
-   
+
    > **Note**: If you're using nvm, run `nvm use` to switch to the correct Node.js version.
 
 2. **Install dependencies**
+
    ```bash
    # Using npm
    npm install
-   
+
    # Using Yarn
    yarn install
-   
+
    # Using pnpm
    pnpm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.local.example .env.local
    ```
+
    Update the values in `.env.local` with your configuration.
 
 4. **Run the development server**
+
    ```bash
    # Using npm
    npm run dev
-   
+
    # Using Yarn
    yarn dev
-   
+
    # Using pnpm
    pnpm dev
    ```

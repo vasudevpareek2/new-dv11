@@ -18,8 +18,8 @@ export default function RoomPage() {
           <h1 className='text-4xl font-bold text-gray-900 mb-4'>404</h1>
           <p className='text-xl text-gray-600 mb-8'>Villa not found</p>
           <Link
-            href='/rooms'
             className='px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors'
+            href='/rooms'
           >
             Back to Villas
           </Link>
@@ -32,7 +32,7 @@ export default function RoomPage() {
     <div className='min-h-screen bg-gray-50'>
       {/* Hero Section */}
       <div className='relative h-96'>
-        <Image src={room.image} alt={room.name} fill className='object-cover' />
+        <Image fill alt={room.name} className='object-cover' src={room.image} />
         <div className='absolute inset-0 bg-black bg-opacity-40 flex items-center'>
           <div className='container mx-auto px-4'>
             <h1 className='text-4xl md:text-5xl font-bold text-white mb-4'>{room.name}</h1>
@@ -62,10 +62,10 @@ export default function RoomPage() {
                     viewBox='0 0 24 24'
                   >
                     <path
+                      d='M5 13l4 4L19 7'
                       strokeLinecap='round'
                       strokeLinejoin='round'
                       strokeWidth={2}
-                      d='M5 13l4 4L19 7'
                     />
                   </svg>
                   <span className='text-gray-700'>{feature}</span>
@@ -84,22 +84,36 @@ export default function RoomPage() {
 
               <div className='space-y-4 mb-6'>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>Check-in</label>
+                  <label htmlFor='checkin' className='block text-sm font-medium text-gray-700 mb-1'>
+                    Check-in
+                  </label>
                   <input
-                    type='date'
+                    id='checkin'
                     className='w-full px-4 py-2 border border-gray-300 rounded-md'
+                    type='date'
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>Check-out</label>
+                  <label
+                    htmlFor='checkout'
+                    className='block text-sm font-medium text-gray-700 mb-1'
+                  >
+                    Check-out
+                  </label>
                   <input
-                    type='date'
+                    id='checkout'
                     className='w-full px-4 py-2 border border-gray-300 rounded-md'
+                    type='date'
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-medium text-gray-700 mb-1'>Guests</label>
-                  <select className='w-full px-4 py-2 border border-gray-300 rounded-md'>
+                  <label htmlFor='guests' className='block text-sm font-medium text-gray-700 mb-1'>
+                    Guests
+                  </label>
+                  <select
+                    id='guests'
+                    className='w-full px-4 py-2 border border-gray-300 rounded-md'
+                  >
                     <option>1 Adult</option>
                     <option>2 Adults</option>
                     <option>2 Adults, 1 Child</option>

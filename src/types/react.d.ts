@@ -8,17 +8,17 @@ declare module 'react' {
 
   interface ReactNodeArray extends Array<ReactNode> {}
   type ReactFragment = {} | ReactNodeArray;
-  
+
   type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined;
 
   // Add any other React type augmentations here if needed
-  
+
   // This helps with the 'Link' component type issues
   interface HTMLAttributes<T> extends AriaAttributes, DOMAttributes<T> {
     // Add any custom HTML attributes here if needed
     [key: string]: any;
   }
-  
+
   // Add proper type for the Link component
   interface LinkHTMLAttributes<T> extends HTMLAttributes<T> {
     as?: string;

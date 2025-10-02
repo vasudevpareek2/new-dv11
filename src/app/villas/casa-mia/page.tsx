@@ -1,9 +1,7 @@
 'use client';
 
-import VillaLayout from '@/components/villas/VillaLayout';
-import VillaBookingForm from '@/components/villas/VillaBookingForm';
-// Using require to avoid TypeScript errors with Next.js Image
-const Image = require('next/image').default;
+import { useState } from 'react';
+import Image from 'next/image';
 import {
   FaWifi,
   FaSwimmingPool,
@@ -16,13 +14,8 @@ import {
   FaUsers,
   FaHome,
 } from 'react-icons/fa';
-
-// Fix icon props type
-type IconProps = {
-  size?: number;
-  className?: string;
-};
-import { useState } from 'react';
+import VillaLayout from '@/components/villas/VillaLayout';
+import VillaBookingForm from '@/components/villas/VillaBookingForm';
 
 export default function VillaCasaMia() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -55,19 +48,19 @@ export default function VillaCasaMia() {
 
   return (
     <VillaLayout
-      title='Villa Casa Mia | Dolce Vita Pushkar'
       description='Luxurious 3-bedroom villa with private pool and modern amenities at Dolce Vita Pushkar.'
       image='/images/villas/casa-mia/main.jpg'
+      title='Villa Casa Mia | Dolce Vita Pushkar'
     >
       {/* Hero Section */}
       <div className='relative h-[60vh] w-full'>
         <Image
-          src='/images/villas/casa-mia/main.jpg'
-          alt='Villa Casa Mia'
           fill
-          className='object-cover rounded-lg'
           priority
+          alt='Villa Casa Mia'
+          className='object-cover rounded-lg'
           sizes='100vw'
+          src='/images/villas/casa-mia/main.jpg'
         />
         <div className='absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center'>
           <div className='text-center text-white px-4'>
@@ -90,12 +83,19 @@ export default function VillaCasaMia() {
                     key={index}
                     className={`relative h-24 cursor-pointer transition-opacity ${selectedImage === index ? 'ring-2 ring-primary-500' : 'opacity-75 hover:opacity-100'}`}
                     onClick={() => setSelectedImage(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setSelectedImage(index);
+                      }
+                    }}
+                    role='button'
+                    tabIndex={0}
                   >
                     <Image
-                      src={img}
-                      alt={`Villa Casa Mia - ${index + 1}`}
                       fill
+                      alt={`Villa Casa Mia - ${index + 1}`}
                       className='object-cover rounded'
+                      src={img}
                     />
                   </div>
                 ))}
@@ -104,10 +104,10 @@ export default function VillaCasaMia() {
               {/* Main Image */}
               <div className='relative h-96 w-full rounded-xl overflow-hidden'>
                 <Image
-                  src={galleryImages[selectedImage] || '/images/villas/casa-mia/main.jpg'}
-                  alt='Villa Casa Mia'
                   fill
+                  alt='Villa Casa Mia'
                   className='object-cover'
+                  src={galleryImages[selectedImage] || '/images/villas/casa-mia/main.jpg'}
                 />
               </div>
             </div>
@@ -121,21 +121,27 @@ export default function VillaCasaMia() {
 
               <div className='grid grid-cols-1 md:grid-cols-3 gap-6 bg-gray-50 p-6 rounded-xl'>
                 <div className='flex items-center'>
-                    <div className="text-blue-500 mr-3"><FaHome size={20} /></div>
+                  <div className='text-blue-500 mr-3'>
+                    <FaHome size={20} />
+                  </div>
                   <div>
                     <p className='text-sm text-gray-500'>Size</p>
                     <p className='font-medium'>251 m²</p>
                   </div>
                 </div>
                 <div className='flex items-center'>
-                    <div className="text-blue-500 mr-3"><FaUsers size={20} /></div>
+                  <div className='text-blue-500 mr-3'>
+                    <FaUsers size={20} />
+                  </div>
                   <div>
                     <p className='text-sm text-gray-500'>Guests</p>
                     <p className='font-medium'>Up to 6</p>
                   </div>
                 </div>
                 <div className='flex items-center'>
-                    <div className="text-blue-500 mr-3"><FaBed size={20} /></div>
+                  <div className='text-blue-500 mr-3'>
+                    <FaBed size={20} />
+                  </div>
                   <div>
                     <p className='text-sm text-gray-500'>Bedrooms</p>
                     <p className='font-medium'>3</p>
@@ -160,11 +166,7 @@ export default function VillaCasaMia() {
 
           {/* Right Column - Booking Form */}
           <div className='lg:pl-8'>
-            <VillaBookingForm
-              villaId='casa-mia'
-              villaName='Villa Casa Mia'
-              maxGuests={6}
-            />
+            <VillaBookingForm maxGuests={6} villaId='casa-mia' villaName='Villa Casa Mia' />
           </div>
         </div>
       </div>

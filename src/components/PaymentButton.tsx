@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 import toast from 'react-hot-toast';
+import { loadRazorpay, RazorpayOptions, RazorpayPaymentSuccess } from '@/lib/razorpay';
 import { api } from '@/lib/api';
 
 interface PaymentButtonProps {
@@ -60,21 +60,21 @@ export default function PaymentButton({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           amount: 10000,
           currency: 'INR',
-          notes: {}
-        })
+          notes: {},
+        }),
       });
-      
+
       console.log('Test response status:', response.status);
       console.log('Test response headers:', Object.fromEntries(response.headers.entries()));
-      
+
       const data = await response.text();
       console.log('Test response body:', data);
-      
+
       if (!response.ok) {
         console.error('Test API call failed:', response.status, data);
       } else {
@@ -102,12 +102,15 @@ export default function PaymentButton({
         currency,
         notes: metadata,
       });
-      
-      const { data: orderData, error: orderError } = await api.post<OrderResponse>('/payments/orders', {
-        amount: Math.round(amount * 100), // Convert to paise
-        currency,
-        notes: metadata,
-      });
+
+      const { data: orderData, error: orderError } = await api.post<OrderResponse>(
+        '/payments/orders',
+        {
+          amount: Math.round(amount * 100), // Convert to paise
+          currency,
+          notes: metadata,
+        }
+      );
 
       console.log('Order response:', { orderData, orderError });
 
@@ -154,12 +157,15 @@ export default function PaymentButton({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_signature: response.razorpay_signature,
             });
-            
-            const { data: verifyData, error: verifyError } = await api.post<VerifyResponse>('/payments/verify', {
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-            });
+
+            const { data: verifyData, error: verifyError } = await api.post<VerifyResponse>(
+              '/payments/verify',
+              {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+              }
+            );
 
             console.log('Verification response:', { verifyData, verifyError });
 
@@ -239,20 +245,20 @@ export default function PaymentButton({
   };
 
   return (
-    <div className="flex gap-2">
+    <div className='flex gap-2'>
       <button
-        onClick={handlePayment}
-        disabled={disabled || isLoading}
-        className={`px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${className}`}
         aria-busy={isLoading}
+        className={`px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors ${className}`}
+        disabled={disabled || isLoading}
+        onClick={handlePayment}
       >
         {isLoading ? 'Processing...' : buttonText}
       </button>
-      
+
       {/* Debug button - remove this after testing */}
       <button
+        className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm'
         onClick={testApiCall}
-        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
       >
         Test API
       </button>

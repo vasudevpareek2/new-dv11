@@ -83,11 +83,12 @@ export default function DiningPage() {
               We&apos;re crafting an exceptional dining experience for you.
             </p>
             <p className='text-gray-500 max-w-2xl mx-auto mb-8'>
-              Our culinary team is working hard to bring you a unique dining experience that combines local flavors with international cuisine. Please check back soon for updates.
+              Our culinary team is working hard to bring you a unique dining experience that
+              combines local flavors with international cuisine. Please check back soon for updates.
             </p>
-            <a 
-              href='/contact' 
+            <a
               className='inline-block bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-8 rounded-full transition-colors duration-300'
+              href='/contact'
             >
               Contact Us
             </a>
