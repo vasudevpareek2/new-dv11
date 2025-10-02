@@ -1,22 +1,13 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Philosopher } from 'next/font/google';
 import './globals.css';
 import FloatingIcons from '@/components/FloatingIcons';
+import { philosopher } from './fonts';
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   fallback: ['system-ui', 'arial'],
-});
-
-// Initialize Philosopher font
-const philosopher = Philosopher({
-  weight: ['400', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-philosopher',
-  fallback: ['serif'],
 });
 
 export const metadata: Metadata = {
@@ -75,20 +66,21 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
 };
-
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang='en' className={`${philosopher.variable} font-sans`}>
+    <html lang="en" className={`${philosopher.variable} font-sans`}>
       <body className={inter.className}>
-        <div id='page' className='hfeed site'>
-          {children}
-          <FloatingIcons />
-        </div>
+        <FloatingIcons />
+        {children}
       </body>
     </html>
   );
