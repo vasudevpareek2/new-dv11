@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     if (!villaId) {
       return NextResponse.json(
         { error: 'Villa ID is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
